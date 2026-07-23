@@ -16,7 +16,9 @@
 
         /* AUTH & PROFILE */
         .auth-buttons { display: flex; gap: 10px; align-items: center; }
-        .btn-login { padding: 8px 16px; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-auth { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-login { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); }
+        .btn-register { background: var(--accent-color); border: none; color: #0f172a; }
         .user-profile { display: none; align-items: center; gap: 12px; font-weight: bold; color: var(--accent-color); }
         .badge-admin { background: #eab308; color: #000; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
@@ -52,7 +54,7 @@
         .btn-buy { width: 100%; padding: 10px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: auto; }
         .btn-delete { width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: 5px; }
 
-        /* MODAL LOGIN */
+        /* MODAL LOGIN & REGISTER */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
         .modal-content { background: var(--card-bg); border: 1px solid #334155; width: 100%; max-width: 380px; border-radius: 12px; padding: 25px; position: relative; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
@@ -60,11 +62,12 @@
         .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
-        .form-group input { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
         .btn-submit { width: 100%; padding: 12px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
         .error-message { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; }
-        .demo-info { background: rgba(6, 182, 212, 0.1); border: 1px border-dashed var(--accent-color); padding: 10px; border-radius: 6px; font-size: 12px; color: var(--accent-color); margin-bottom: 15px; }
+        .switch-auth { text-align: center; margin-top: 15px; font-size: 13px; color: var(--text-muted); }
+        .switch-auth a { color: var(--accent-color); text-decoration: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -72,10 +75,11 @@
     <!-- NAVBAR -->
     <header>
         <div class="navbar">
-            <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GAME STORE</a>
+            <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GANZ STORE</a>
 
             <div class="auth-buttons" id="auth-area">
-                <button class="btn-login" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+                <button class="btn-auth btn-login" onclick="openModal('login')"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+                <button class="btn-auth btn-register" onclick="openModal('register')"><i class="fa-solid fa-user-plus"></i> Daftar</button>
             </div>
             
             <div class="user-profile" id="user-area">
@@ -119,15 +123,14 @@
         <div class="account-grid" id="account-list"></div>
     </div>
 
-    <!-- MODAL LOGIN -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content auth-form">
-            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+    <!-- MODAL LOGIN / REGISTER -->
+    <div class="modal" id="auth-modal">
+        <!-- FORM LOGIN -->
+        <div class="modal-content auth-form" id="form-login-box">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2>Login Akun</h2>
 
-            <div class="demo-info">
-
-            <div class="error-message" id="error-box">
+            <div class="error-message" id="login-error-box">
                 <i class="fa-solid fa-circle-exclamation"></i> Username atau Password salah!
             </div>
 
@@ -142,25 +145,68 @@
                 </div>
                 <button type="submit" class="btn-submit">Masuk</button>
             </form>
+            <div class="switch-auth">
+                Belum punya akun? <a onclick="switchForm('register')">Daftar Sekarang</a>
+            </div>
+        </div>
+
+        <!-- FORM REGISTER (BUAT AKUN BARU) -->
+        <div class="modal-content auth-form" id="form-register-box" style="display:none;">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Buat Akun Baru</h2>
+
+            <div class="error-message" id="reg-error-box">
+                <i class="fa-solid fa-circle-exclamation"></i> Username sudah dipakai!
+            </div>
+
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Username Baru</label>
+                    <input type="text" id="reg-username" placeholder="Buat username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" placeholder="Buat password" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipe Akun (Role)</label>
+                    <select id="reg-role">
+                        <option value="user">Pembeli (Buyer)</option>
+                        <option value="admin">Penjual (Admin)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Daftar Akun</button>
+            </form>
+            <div class="switch-auth">
+                Sudah punya akun? <a onclick="switchForm('login')">Login Saja</a>
+            </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // DATA USER VALIDASI
-        const registeredUsers = [
-            { username: "admin", password: "ganzgggimang", role: "admin" },
+        // 1. CEK ATAU AMBIL USERS DARI LOCALSTORAGE
+        let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [
+            { username: "admin", password: "123", role: "admin" },
+            { username: "buyer", password: "123", role: "user" }
         ];
 
         // DATA KATALOG
-        let accounts = [
+        let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
             { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
             { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500" }
         ];
 
-        let currentUser = null;
+        let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
 
-        // RENDER AKUN TERGANTUNG ROLE
+        // SIMPAN KE STORAGE HP
+        function saveToStorage() {
+            localStorage.setItem('users_database', JSON.stringify(registeredUsers));
+            localStorage.setItem('accounts_database', JSON.stringify(accounts));
+            localStorage.setItem('session_user', JSON.stringify(currentUser));
+        }
+
+        // TAMPILKAN KATALOG
         function displayAccounts() {
             const listContainer = document.getElementById('account-list');
             
@@ -181,33 +227,9 @@
                     </div>
                 </div>
             `).join('');
-        }
 
-        // FUNGSI MODAL
-        function openLoginModal() {
-            document.getElementById('error-box').style.display = 'none';
-            document.getElementById('login-modal').style.display = 'flex';
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
-        }
-
-        // FUNGSI LOGIN
-        function handleLogin(event) {
-            event.preventDefault();
-
-            const inputUsn = document.getElementById('login-username').value.trim();
-            const inputPass = document.getElementById('login-password').value;
-            const errorBox = document.getElementById('error-box');
-
-            const userMatch = registeredUsers.find(
-                user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
-            );
-
-            if (userMatch) {
-                currentUser = userMatch;
-                
+            // CEK STATUS LOGIN USER TERAKHIR
+            if (currentUser) {
                 document.getElementById('auth-area').style.display = 'none';
                 document.getElementById('user-area').style.display = 'flex';
                 document.getElementById('username-display').innerText = currentUser.username;
@@ -219,10 +241,79 @@
                     document.getElementById('role-badge').style.display = 'none';
                     document.getElementById('admin-panel').style.display = 'none';
                 }
+            } else {
+                document.getElementById('auth-area').style.display = 'flex';
+                document.getElementById('user-area').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'none';
+            }
+        }
 
-                document.getElementById('login-username').value = '';
-                document.getElementById('login-password').value = '';
-                closeLoginModal();
+        // FUNGSI MODAL & SWITCH FORM
+        function openModal(type) {
+            document.getElementById('login-error-box').style.display = 'none';
+            document.getElementById('reg-error-box').style.display = 'none';
+            switchForm(type);
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
+        function switchForm(type) {
+            if(type === 'login') {
+                document.getElementById('form-login-box').style.display = 'block';
+                document.getElementById('form-register-box').style.display = 'none';
+            } else {
+                document.getElementById('form-login-box').style.display = 'none';
+                document.getElementById('form-register-box').style.display = 'block';
+            }
+        }
+
+        // FUNGSI REGISTER (BUAT AKUN BARU)
+        function handleRegister(event) {
+            event.preventDefault();
+            const usn = document.getElementById('reg-username').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+            const regError = document.getElementById('reg-error-box');
+
+            // Cek jika username sudah terpakai
+            const isExist = registeredUsers.some(u => u.username.toLowerCase() === usn.toLowerCase());
+
+            if (isExist) {
+                regError.innerText = "Username sudah dipakai orang lain!";
+                regError.style.display = 'block';
+                return;
+            }
+
+            // Simpan User Baru
+            const newUser = { username: usn, password: pass, role: role };
+            registeredUsers.push(newUser);
+            currentUser = newUser;
+            saveToStorage();
+
+            alert(`Pendaftaran Berhasil! Selamat datang ${usn}`);
+            closeModal();
+            displayAccounts();
+        }
+
+        // FUNGSI LOGIN
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const inputUsn = document.getElementById('login-username').value.trim();
+            const inputPass = document.getElementById('login-password').value;
+            const errorBox = document.getElementById('login-error-box');
+
+            const userMatch = registeredUsers.find(
+                user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
+            );
+
+            if (userMatch) {
+                currentUser = userMatch;
+                saveToStorage();
+                closeModal();
                 displayAccounts();
 
                 alert(`Login Berhasil! Selamat datang ${currentUser.username}`);
@@ -231,7 +322,7 @@
             }
         }
 
-        // TAMBAH PRODUK KHUSUS ADMIN
+        // TAMBAH PRODUK (ADMIN)
         function addNewAccount(e) {
             e.preventDefault();
             
@@ -244,15 +335,17 @@
             };
 
             accounts.push(newAcc);
+            saveToStorage();
             displayAccounts();
             e.target.reset();
             alert("Produk berhasil ditambahkan!");
         }
 
-        // HAPUS PRODUK KHUSUS ADMIN
+        // HAPUS PRODUK (ADMIN)
         function deleteAccount(accId) {
             if (confirm(`Yakin ingin menghapus akun ID: ${accId}?`)) {
                 accounts = accounts.filter(acc => acc.id !== accId);
+                saveToStorage();
                 displayAccounts();
             }
         }
@@ -261,25 +354,23 @@
         function logout() {
             if (confirm("Mau keluar dari akun?")) {
                 currentUser = null;
-                document.getElementById('auth-area').style.display = 'flex';
-                document.getElementById('user-area').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'none';
+                saveToStorage();
                 displayAccounts();
             }
         }
 
         function buyItem(accId) {
             if (!currentUser) {
-                alert("Login terlebih dahulu untuk melakukan transaksi!");
-                openLoginModal();
+                alert("Silakan Login atau Buat Akun terlebih dahulu untuk bertransaksi!");
+                openModal('login');
                 return;
             }
             alert(`Lanjut transaksi untuk ID: ${accId} via WhatsApp!`);
         }
 
         window.onclick = function(e) {
-            const modal = document.getElementById('login-modal');
-            if (e.target === modal) closeLoginModal();
+            const modal = document.getElementById('auth-modal');
+            if (e.target === modal) closeModal();
         }
 
         displayAccounts();
