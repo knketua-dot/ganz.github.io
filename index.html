@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Akun Game - Trusted Gaming Store</title>
+    <title>Ganz Store - Game Store Trusted</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -51,7 +51,7 @@
         .account-info { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
         .account-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
         .account-price { font-size: 18px; color: var(--accent-color); font-weight: 800; margin-bottom: 12px; }
-        .btn-buy { width: 100%; padding: 10px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: auto; }
+        .btn-buy { width: 100%; padding: 10px; background: #25D366; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-delete { width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: 5px; }
 
         /* MODAL LOGIN & REGISTER */
@@ -62,7 +62,7 @@
         .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
-        .form-group input, .form-group select { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
+        .form-group input { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
         .btn-submit { width: 100%; padding: 12px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
         .error-message { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; }
@@ -79,7 +79,7 @@
 
             <div class="auth-buttons" id="auth-area">
                 <button class="btn-auth btn-login" onclick="openModal('login')"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-                <button class="btn-auth btn-register" onclick="openModal('register')"><i class="fa-solid fa-user-plus"></i> Daftar</button>
+                <button class="btn-auth btn-register" onclick="openModal('register')"><i class="fa-solid fa-user-plus"></i> Buat Akun</button>
             </div>
             
             <div class="user-profile" id="user-area">
@@ -102,7 +102,7 @@
     <!-- MAIN CONTAINER -->
     <div class="container">
 
-        <!-- PANEL ADMIN (HANYA MUNCUL JIKA ADMIN LOGIN) -->
+        <!-- PANEL ADMIN KHUSUS ADMIN KODE -->
         <div class="admin-panel" id="admin-panel">
             <h3><i class="fa-solid fa-user-gear"></i> Panel Admin - Tambah Akun Jualan</h3>
             <form class="admin-form" onsubmit="addNewAccount(event)">
@@ -150,10 +150,10 @@
             </div>
         </div>
 
-        <!-- FORM REGISTER (BUAT AKUN BARU) -->
+        <!-- FORM REGISTER (OTOMATIS BUYER) -->
         <div class="modal-content auth-form" id="form-register-box" style="display:none;">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2>Buat Akun Baru</h2>
+            <h2>Buat Akun Pembeli</h2>
 
             <div class="error-message" id="reg-error-box">
                 <i class="fa-solid fa-circle-exclamation"></i> Username sudah dipakai!
@@ -168,13 +168,6 @@
                     <label>Password</label>
                     <input type="password" id="reg-password" placeholder="Buat password" required>
                 </div>
-                <div class="form-group">
-                    <label>Tipe Akun (Role)</label>
-                    <select id="reg-role">
-                        <option value="user">Pembeli (Buyer)</option>
-                        <option value="admin">Penjual (Admin)</option>
-                    </select>
-                </div>
                 <button type="submit" class="btn-submit">Daftar Akun</button>
             </form>
             <div class="switch-auth">
@@ -185,13 +178,20 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // 1. CEK ATAU AMBIL USERS DARI LOCALSTORAGE
-        let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [
-            { username: "admin", password: "123", role: "admin" },
-            { username: "buyer", password: "123", role: "user" }
-        ];
+        // ==========================================
+        // CONFIGURASI PENJUAL
+        // ==========================================
+        const SELLER_WHATSAPP = "6285834368903"; // GANTI DENGAN NOMOR WA KAMU (Gunakan awalan 62)
 
-        // DATA KATALOG
+        // AKUN ADMIN RAHASIA (HANYA BISA LOGIN LEWAT SINI)
+        const ADMIN_CREDENTIALS = {
+            username: "admin123",
+            password: "ganzgggimang"
+        };
+        // ==========================================
+
+        let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
+
         let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
             { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
             { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500" }
@@ -199,14 +199,12 @@
 
         let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
 
-        // SIMPAN KE STORAGE HP
         function saveToStorage() {
             localStorage.setItem('users_database', JSON.stringify(registeredUsers));
             localStorage.setItem('accounts_database', JSON.stringify(accounts));
             localStorage.setItem('session_user', JSON.stringify(currentUser));
         }
 
-        // TAMPILKAN KATALOG
         function displayAccounts() {
             const listContainer = document.getElementById('account-list');
             
@@ -222,13 +220,12 @@
                         
                         ${currentUser && currentUser.role === 'admin' ? 
                             `<button class="btn-delete" onclick="deleteAccount('${acc.id}')"><i class="fa-solid fa-trash"></i> Hapus Akun</button>` : 
-                            `<button class="btn-buy" onclick="buyItem('${acc.id}')">Beli Sekarang</button>`
+                            `<button class="btn-buy" onclick="buyViaWhatsApp('${acc.id}', '${acc.title}', ${acc.price})"><i class="fa-brands fa-whatsapp"></i> Beli Sekarang</button>`
                         }
                     </div>
                 </div>
             `).join('');
 
-            // CEK STATUS LOGIN USER TERAKHIR
             if (currentUser) {
                 document.getElementById('auth-area').style.display = 'none';
                 document.getElementById('user-area').style.display = 'flex';
@@ -248,7 +245,6 @@
             }
         }
 
-        // FUNGSI MODAL & SWITCH FORM
         function openModal(type) {
             document.getElementById('login-error-box').style.display = 'none';
             document.getElementById('reg-error-box').style.display = 'none';
@@ -270,15 +266,19 @@
             }
         }
 
-        // FUNGSI REGISTER (BUAT AKUN BARU)
+        // AKUN BARU SELALU OTOMATIS BUYER
         function handleRegister(event) {
             event.preventDefault();
             const usn = document.getElementById('reg-username').value.trim();
             const pass = document.getElementById('reg-password').value;
-            const role = document.getElementById('reg-role').value;
             const regError = document.getElementById('reg-error-box');
 
-            // Cek jika username sudah terpakai
+            if (usn.toLowerCase() === ADMIN_CREDENTIALS.username.toLowerCase()) {
+                regError.innerText = "Username ini tidak boleh digunakan!";
+                regError.style.display = 'block';
+                return;
+            }
+
             const isExist = registeredUsers.some(u => u.username.toLowerCase() === usn.toLowerCase());
 
             if (isExist) {
@@ -287,8 +287,7 @@
                 return;
             }
 
-            // Simpan User Baru
-            const newUser = { username: usn, password: pass, role: role };
+            const newUser = { username: usn, password: pass, role: "user" };
             registeredUsers.push(newUser);
             currentUser = newUser;
             saveToStorage();
@@ -298,7 +297,7 @@
             displayAccounts();
         }
 
-        // FUNGSI LOGIN
+        // VALIDASI LOGIN KHUSUS ADMIN ATAU BUYER
         function handleLogin(event) {
             event.preventDefault();
 
@@ -306,6 +305,17 @@
             const inputPass = document.getElementById('login-password').value;
             const errorBox = document.getElementById('login-error-box');
 
+            // Cek jika yang login adalah Admin Rahasia
+            if (inputUsn === ADMIN_CREDENTIALS.username && inputPass === ADMIN_CREDENTIALS.password) {
+                currentUser = { username: "Admin", role: "admin" };
+                saveToStorage();
+                closeModal();
+                displayAccounts();
+                alert("Login Admin Berhasil!");
+                return;
+            }
+
+            // Cek pengguna biasa (Buyer)
             const userMatch = registeredUsers.find(
                 user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
             );
@@ -315,14 +325,31 @@
                 saveToStorage();
                 closeModal();
                 displayAccounts();
-
                 alert(`Login Berhasil! Selamat datang ${currentUser.username}`);
             } else {
                 errorBox.style.display = 'block';
             }
         }
 
-        // TAMBAH PRODUK (ADMIN)
+        // TRANSAKSI LANGSUNG KE WHATSAPP
+        function buyViaWhatsApp(id, title, price) {
+            if (!currentUser) {
+                alert("Silakan Login/Buat Akun terlebih dahulu untuk membeli!");
+                openModal('login');
+                return;
+            }
+
+            const message = `Halo Admin Ganz Store! Saya ingin membeli akun berikut:%0A%0A` +
+                            `📌 *Kode Akun:* ${id}%0A` +
+                            `🎮 *Nama Akun:* ${title}%0A` +
+                            `💰 *Harga:* Rp ${price.toLocaleString('id-ID')}%0A%0A` +
+                            `👤 *Username Pembeli:* ${currentUser.username}%0A%0A` +
+                            `Mohon diproses, terima kasih!`;
+
+            const waUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${message}`;
+            window.open(waUrl, '_blank');
+        }
+
         function addNewAccount(e) {
             e.preventDefault();
             
@@ -341,7 +368,6 @@
             alert("Produk berhasil ditambahkan!");
         }
 
-        // HAPUS PRODUK (ADMIN)
         function deleteAccount(accId) {
             if (confirm(`Yakin ingin menghapus akun ID: ${accId}?`)) {
                 accounts = accounts.filter(acc => acc.id !== accId);
@@ -350,22 +376,12 @@
             }
         }
 
-        // LOGOUT
         function logout() {
             if (confirm("Mau keluar dari akun?")) {
                 currentUser = null;
                 saveToStorage();
                 displayAccounts();
             }
-        }
-
-        function buyItem(accId) {
-            if (!currentUser) {
-                alert("Silakan Login atau Buat Akun terlebih dahulu untuk bertransaksi!");
-                openModal('login');
-                return;
-            }
-            alert(`Lanjut transaksi untuk ID: ${accId} via WhatsApp!`);
         }
 
         window.onclick = function(e) {
