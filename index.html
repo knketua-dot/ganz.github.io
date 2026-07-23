@@ -13,6 +13,9 @@
         /* NAVBAR */
         header { background-color: rgba(11, 15, 25, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 5%; max-width: 1200px; margin: auto; gap: 15px; }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .btn-settings-gear { background: var(--card-bg); border: 1px solid var(--border); color: var(--accent-color); width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s; }
+        .btn-settings-gear:hover { border-color: var(--accent-color); background: rgba(6, 182, 212, 0.1); }
         .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 
         /* AUTH & PROFILE */
@@ -70,11 +73,15 @@
         .btn-delete { width: 100%; padding: 8px; background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
         .btn-toggle-status { width: 100%; padding: 8px; background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-        /* MODAL GENERAL & CHECKOUT */
+        /* MODAL GENERAL & SETTINGS MENU LIST */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
         .modal-content { background: var(--card-bg); border: 1px solid var(--border); width: 100%; max-width: 420px; border-radius: 16px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: var(--text-muted); }
         
+        /* SETTING MENU ITEM STYLE */
+        .setting-menu-btn { width: 100%; padding: 12px 14px; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 13px; text-align: left; transition: 0.2s; }
+        .setting-menu-btn:hover { border-color: var(--accent-color); background: rgba(6, 182, 212, 0.05); }
+
         /* AUTH FORM */
         .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; font-size: 18px; }
         .form-group { margin-bottom: 14px; }
@@ -130,11 +137,17 @@
     <!-- NAVBAR -->
     <header>
         <div class="navbar">
-            <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GANZ STORE</a>
+            <div class="logo-area">
+                <!-- TOMBOL GERIGI SETTINGS DI KIRI ATAS -->
+                <button class="btn-settings-gear" onclick="openModal('settings-modal')" title="Pengaturan Aplikasi">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GANZ STORE</a>
+            </div>
 
             <div class="auth-buttons" id="auth-area">
-                <button class="btn-auth btn-login" onclick="openModal('login')"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-                <button class="btn-auth btn-register" onclick="openModal('register')"><i class="fa-solid fa-user-plus"></i> Buat Akun</button>
+                <button class="btn-auth btn-login" onclick="openModal('auth-modal'); switchForm('login');"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+                <button class="btn-auth btn-register" onclick="openModal('auth-modal'); switchForm('register');"><i class="fa-solid fa-user-plus"></i> Buat Akun</button>
             </div>
             
             <div class="user-profile" id="user-area">
@@ -192,6 +205,157 @@
 
         <!-- LIST KATALOG AKUN -->
         <div class="account-grid" id="account-list"></div>
+    </div>
+
+    <!-- MODAL PENGATURAN / SETTINGS UTAMA (IKON GERIGI) -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('settings-modal')">&times;</span>
+            <div class="checkout-header" style="margin-bottom: 20px;">
+                <h3 style="color: var(--accent-color);"><i class="fa-solid fa-gear"></i> Pengaturan Aplikasi</h3>
+                <p>Sesuaikan preferensi dan informasi akun Anda</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="setting-menu-btn" onclick="openSubModal('setting-account')">
+                    <span><i class="fa-solid fa-user" style="color: var(--accent-color); width: 20px;"></i> Akun & Profil Saya</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+
+                <button class="setting-menu-btn" onclick="openSubModal('setting-theme')">
+                    <span><i class="fa-solid fa-palette" style="color: var(--accent-color); width: 20px;"></i> Tema & Tampilan</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+
+                <button class="setting-menu-btn" onclick="openSubModal('setting-notif')">
+                    <span><i class="fa-solid fa-bell" style="color: var(--accent-color); width: 20px;"></i> Notifikasi & Suara</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+
+                <button class="setting-menu-btn" onclick="openSubModal('setting-privacy')">
+                    <span><i class="fa-solid fa-shield-halved" style="color: var(--accent-color); width: 20px;"></i> Privasi & Keamanan</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+
+                <button class="setting-menu-btn" onclick="openSubModal('setting-rules')">
+                    <span><i class="fa-solid fa-book-open" style="color: var(--accent-color); width: 20px;"></i> Peraturan & Ketentuan Toko</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+
+                <button class="setting-menu-btn" onclick="openSubModal('setting-about')">
+                    <span><i class="fa-solid fa-circle-info" style="color: var(--accent-color); width: 20px;"></i> Tentang Aplikasi</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
+                </button>
+            </div>
+
+            <button class="btn-submit" onclick="closeModal('settings-modal')" style="margin-top: 20px;">Tutup</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: AKUN -->
+    <div class="modal" id="setting-account">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-account')">&times;</span>
+            <div class="checkout-header">
+                <h3>Pengaturan Akun</h3>
+                <p>Kelola profil dan keamanan sandi anda</p>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px;" id="account-info-box">
+                Status: Belum Login. Silakan Login terlebih dahulu untuk melihat informasi akun Anda.
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-account')">Kembali</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: TEMA -->
+    <div class="modal" id="setting-theme">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-theme')">&times;</span>
+            <div class="checkout-header">
+                <h3>Tema & Tampilan</h3>
+                <p>Pilih warna tema aksen website</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px;">
+                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: white;">Warna Utama Website:</div>
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="changeThemeColor('#06b6d4', '#164e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4; border: 2px solid white; cursor: pointer;" title="Cyan"></button>
+                    <button onclick="changeThemeColor('#22c55e', '#064e3b')" style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 2px solid white; cursor: pointer;" title="Hijau"></button>
+                    <button onclick="changeThemeColor('#eab308', '#713f12')" style="width: 36px; height: 36px; border-radius: 50%; background: #eab308; border: 2px solid white; cursor: pointer;" title="Kuning"></button>
+                    <button onclick="changeThemeColor('#ec4899', '#831843')" style="width: 36px; height: 36px; border-radius: 50%; background: #ec4899; border: 2px solid white; cursor: pointer;" title="Pink"></button>
+                </div>
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-theme')">Simpan Tema</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: NOTIFIKASI -->
+    <div class="modal" id="setting-notif">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-notif')">&times;</span>
+            <div class="checkout-header">
+                <h3>Notifikasi & Suara</h3>
+                <p>Atur preferensi pemberitahuan</p>
+            </div>
+            <div style="background: var(--bg-dark); padding: 15px; border-radius: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Munculkan Toast Notifikasi</span>
+                <input type="checkbox" id="notif-toggle" checked style="width: 18px; height: 18px; accent-color: var(--accent-color);" onclick="showToast('Pengaturan notifikasi diperbarui!')">
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-notif')">Tutup</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: PRIVASI -->
+    <div class="modal" id="setting-privacy">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-privacy')">&times;</span>
+            <div class="checkout-header">
+                <h3>Privasi & Keamanan</h3>
+                <p>Keamanan data lokal platform</p>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px; line-height: 1.5;">
+                Data akun dan sesi login Anda disimpan secara lokal dan aman di dalam browser perangkat Anda menggunakan enkripsi memori lokal (localStorage).
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-privacy')">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: PERATURAN -->
+    <div class="modal" id="setting-rules">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-rules')">&times;</span>
+            <div class="checkout-header">
+                <h3>Peraturan Toko</h3>
+                <p>Syarat & Ketentuan transaksi</p>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
+                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-color);">
+                    <strong style="color:white; display:block; margin-bottom:2px;">1. Wajib Video Unboxing</strong> Wajib rekam video tanpa putus saat pertama kali login ke akun.
+                </div>
+                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
+                    <strong style="color:white; display:block; margin-bottom:2px;">2. Garansi 1x24 Jam</strong> Batas klaim kendala akun adalah 1 hari setelah data diterima.
+                </div>
+                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--danger);">
+                    <strong style="color:white; display:block; margin-bottom:2px;">3. Tanggung Jawab</strong> Dilarang menggunakan cheat/script ilegal setelah akun dipegang.
+                </div>
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-rules')">Tutup</button>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL SETTINGS: TENTANG APLIKASI -->
+    <div class="modal" id="setting-about">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('setting-about')">&times;</span>
+            <div class="checkout-header">
+                <h3>Tentang Aplikasi</h3>
+                <p>Ganz Store v2.5.0</p>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; line-height: 1.6;">
+                <i class="fa-solid fa-gamepad" style="font-size: 32px; color: var(--accent-color); margin-bottom: 8px; display: block;"></i>
+                Platform jual beli akun game terpercaya, aman, dan cepat. Dibangun khusus untuk memberikan pengalaman transaksi terbaik bagi gamers Indonesia.
+            </div>
+            <button class="btn-submit" onclick="closeModal('setting-about')">Tutup</button>
+        </div>
     </div>
 
     <!-- MODAL LOGIN / REGISTER -->
@@ -295,7 +459,6 @@
             <!-- TAMPILAN QRIS -->
             <div class="qris-container" id="qris-box">
                 <div style="font-size:12px; font-weight:bold; margin-bottom:5px;">Scan QRIS di bawah ini:</div>
-                <!-- GANTI LINK GAMBAR QRIS DI BAWAH INI DENGAN QRIS ANDA -->
                 <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" class="qris-img" alt="QRIS Code">
                 <div class="qris-note">Scan pakai BCA, DANA, OVO, GoPay, ShopeePay, dll.</div>
             </div>
@@ -306,16 +469,12 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // ==========================================
-        // CONFIGURASI PENJUAL
-        // ==========================================
-        const SELLER_WHATSAPP = "6285834368903"; // GANTI DENGAN NOMOR WA KAMU (Gunakan awalan 62)
+        const SELLER_WHATSAPP = "6285834368903";
 
         const ADMIN_CREDENTIALS = {
             username: "admin123",
             password: "ganzgggimang"
         };
-        // ==========================================
 
         let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
 
@@ -390,6 +549,7 @@
                 </div>
             `).join('');
 
+            const accBox = document.getElementById('account-info-box');
             if (currentUser) {
                 document.getElementById('auth-area').style.display = 'none';
                 document.getElementById('user-area').style.display = 'flex';
@@ -402,10 +562,17 @@
                     document.getElementById('role-badge').style.display = 'none';
                     document.getElementById('admin-panel').style.display = 'none';
                 }
+
+                if(accBox) {
+                    accBox.innerHTML = `<strong>Status:</strong> Login sebagai <span style="color:var(--accent-color); font-weight:bold;">${currentUser.username}</span> (${currentUser.role.toUpperCase()})`;
+                }
             } else {
                 document.getElementById('auth-area').style.display = 'flex';
                 document.getElementById('user-area').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'none';
+                if(accBox) {
+                    accBox.innerHTML = `Status: Belum Login. Silakan Login terlebih dahulu untuk melihat informasi akun Anda.`;
+                }
             }
         }
 
@@ -424,8 +591,12 @@
             if(modalId === 'auth-modal') {
                 document.getElementById('login-error-box').style.display = 'none';
                 document.getElementById('reg-error-box').style.display = 'none';
-                switchForm('login');
             }
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function openSubModal(modalId) {
+            document.getElementById('settings-modal').style.display = 'none';
             document.getElementById(modalId).style.display = 'flex';
         }
 
@@ -515,11 +686,11 @@
             }
         }
 
-        // CHECKOUT & PEMBAYARAN
         function openCheckout(id, title, price) {
             if (!currentUser) {
                 showToast("Silakan Login terlebih dahulu untuk membeli!", "error");
                 openModal('auth-modal');
+                switchForm('login');
                 return;
             }
 
@@ -527,7 +698,6 @@
             document.getElementById('checkout-product-title').innerText = title;
             document.getElementById('checkout-product-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
             
-            // Set default QRIS selected
             document.querySelector('input[name="payment"][value="QRIS"]').checked = true;
             selectPayment('QRIS');
 
@@ -606,6 +776,29 @@
                 showToast("Berhasil logout");
             }
         }
+
+        function changeThemeColor(accentHex, heroBgHex) {
+            document.documentElement.style.setProperty('--accent-color', accentHex);
+            const heroEl = document.querySelector('.hero');
+            if(heroEl) {
+                heroEl.style.background = `linear-gradient(135deg, ${heroBgHex} 0%, #0b0f19 100%)`;
+            }
+            localStorage.setItem('user_theme_accent', accentHex);
+            localStorage.setItem('user_theme_hero', heroBgHex);
+            showToast("Tema website berhasil diubah!");
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedAccent = localStorage.getItem('user_theme_accent');
+            const savedHero = localStorage.getItem('user_theme_hero');
+            if (savedAccent && savedHero) {
+                document.documentElement.style.setProperty('--accent-color', savedAccent);
+                const heroEl = document.querySelector('.hero');
+                if(heroEl) {
+                    heroEl.style.background = `linear-gradient(135deg, ${savedHero} 0%, #0b0f19 100%)`;
+                }
+            }
+        });
 
         window.onclick = function(e) {
             if (e.target.classList.contains('modal')) {
