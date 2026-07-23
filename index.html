@@ -7,70 +7,125 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        :root { --bg-dark: #0f172a; --card-bg: #1e293b; --accent-color: #06b6d4; --text-main: #f8fafc; --text-muted: #94a3b8; --danger: #ef4444; }
-        body { background-color: var(--bg-dark); color: var(--text-main); padding-bottom: 50px; }
+        :root { --bg-dark: #0b0f19; --card-bg: #141b2d; --accent-color: #06b6d4; --text-main: #f8fafc; --text-muted: #94a3b8; --danger: #ef4444; --success: #22c55e; --border: #1e293b; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding-bottom: 50px; min-height: 100vh; }
 
-        header { background-color: #0b1120; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 5%; max-width: 1200px; margin: auto; gap: 15px; }
-        .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-decoration: none; white-space: nowrap; }
+        /* NAVBAR */
+        header { background-color: rgba(11, 15, 25, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 5%; max-width: 1200px; margin: auto; gap: 15px; }
+        .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 
         /* AUTH & PROFILE */
         .auth-buttons { display: flex; gap: 10px; align-items: center; }
-        .btn-auth { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-auth { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
         .btn-login { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); }
         .btn-register { background: var(--accent-color); border: none; color: #0f172a; }
-        .user-profile { display: none; align-items: center; gap: 12px; font-weight: bold; color: var(--accent-color); }
+        .user-profile { display: none; align-items: center; gap: 10px; font-weight: bold; color: var(--accent-color); font-size: 14px; }
         .badge-admin { background: #eab308; color: #000; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
         /* HERO & CONTAINER */
-        .hero { background: linear-gradient(180deg, #164e63 0%, var(--bg-dark) 100%); text-align: center; padding: 35px 20px; margin-bottom: 20px; }
-        .hero h1 { font-size: 26px; color: #fff; margin-bottom: 8px; }
+        .hero { background: linear-gradient(135deg, #164e63 0%, #0b0f19 100%); text-align: center; padding: 40px 20px; margin-bottom: 25px; border-bottom: 1px solid var(--border); }
+        .hero h1 { font-size: 26px; color: #fff; margin-bottom: 8px; font-weight: 800; }
         .hero p { font-size: 14px; color: var(--text-muted); }
         .container { max-width: 1200px; margin: auto; padding: 0 15px; }
 
+        /* FILTER & SEARCH BAR */
+        .filter-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .search-box { position: relative; width: 100%; }
+        .search-box input { width: 100%; padding: 12px 15px 12px 42px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; color: white; font-size: 14px; outline: none; transition: 0.2s; }
+        .search-box input:focus { border-color: var(--accent-color); }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        .game-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .game-filters::-webkit-scrollbar { display: none; }
+        .filter-btn { padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
+
         /* PANEL ADMIN */
-        .admin-panel {
-            display: none;
-            background: #1e293b;
-            border: 1px solid #06b6d4;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        .admin-panel h3 { color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-        .admin-form input, .admin-form select { padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; outline: none; }
-        .btn-add-product { grid-column: 1 / -1; padding: 12px; background: #22c55e; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .admin-panel { display: none; background: var(--card-bg); border: 1px solid var(--accent-color); border-radius: 14px; padding: 20px; margin-bottom: 30px; }
+        .admin-panel h3 { color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; }
+        .admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .admin-form input, .admin-form select { padding: 10px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; font-size: 13px; }
+        .btn-add-product { grid-column: 1 / -1; padding: 12px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
 
         /* GRID AKUN */
         .account-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-        .account-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; position: relative; }
-        .card-img-wrapper { position: relative; width: 100%; height: 160px; }
+        .account-card { background: var(--card-bg); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; position: relative; transition: transform 0.2s; }
+        .account-card:hover { transform: translateY(-3px); }
+        .card-img-wrapper { position: relative; width: 100%; height: 160px; background: #000; }
         .account-img { width: 100%; height: 100%; object-fit: cover; }
-        .game-badge { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.85); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
-        .account-info { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
-        .account-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-        .account-price { font-size: 18px; color: var(--accent-color); font-weight: 800; margin-bottom: 12px; }
-        .btn-buy { width: 100%; padding: 10px; background: #25D366; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-delete { width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: 5px; }
+        .game-badge { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+        .status-badge { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+        .status-badge.tersedia { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .status-badge.terjual { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
 
-        /* MODAL LOGIN & REGISTER */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card-bg); border: 1px solid #334155; width: 100%; max-width: 380px; border-radius: 12px; padding: 25px; position: relative; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
+        .account-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+        .account-id { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+        .account-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+        .account-price { font-size: 17px; color: var(--accent-color); font-weight: 800; margin-bottom: 15px; }
         
-        .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
-        .form-group input { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
-        .btn-submit { width: 100%; padding: 12px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .card-actions { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+        .btn-buy { width: 100%; padding: 10px; background: #25D366; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-buy:hover { opacity: 0.9; }
+        .btn-delete { width: 100%; padding: 8px; background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-toggle-status { width: 100%; padding: 8px; background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
+
+        /* MODAL GENERAL & CHECKOUT */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border); width: 100%; max-width: 420px; border-radius: 16px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: var(--text-muted); }
         
-        .error-message { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; }
-        .switch-auth { text-align: center; margin-top: 15px; font-size: 13px; color: var(--text-muted); }
-        .switch-auth a { color: var(--accent-color); text-decoration: none; font-weight: bold; cursor: pointer; }
+        /* AUTH FORM */
+        .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; font-size: 18px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 12px; color: var(--text-muted); }
+        .input-password-wrapper { position: relative; }
+        .input-password-wrapper input { width: 100%; padding: 10px 40px 10px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; font-size: 13px; }
+        .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 14px; }
+        
+        .form-group input.standard-input { width: 100%; padding: 10px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; font-size: 13px; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 5px; }
+        
+        .error-message { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #f87171; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 15px; text-align: center; }
+        .switch-auth { text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
+        .switch-auth span { color: var(--accent-color); font-weight: bold; cursor: pointer; }
+
+        /* CHECKOUT MODAL STYLES */
+        .checkout-header { text-align: center; margin-bottom: 20px; }
+        .checkout-header h3 { font-size: 18px; color: white; margin-bottom: 4px; }
+        .checkout-header p { font-size: 13px; color: var(--accent-color); font-weight: bold; }
+        
+        .payment-methods { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .payment-option { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .payment-option:hover, .payment-option.selected { border-color: var(--accent-color); background: rgba(6, 182, 212, 0.05); }
+        .payment-option span { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .payment-option input { accent-color: var(--accent-color); }
+
+        /* QRIS CONTAINER */
+        .qris-container { display: none; text-align: center; margin-bottom: 20px; background: var(--bg-dark); padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
+        .qris-img { width: 180px; height: 180px; object-fit: contain; background: white; padding: 8px; border-radius: 8px; margin: 10px auto; display: block; }
+        .qris-note { font-size: 11px; color: var(--text-muted); }
+
+        /* TOAST NOTIFICATION */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: var(--card-bg); border: 1px solid var(--border); color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease forwards; }
+        .toast.success { border-color: var(--success); }
+        .toast.success i { color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.error i { color: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* RESPONSIVE */
+        @media(max-width: 480px) {
+            .navbar { padding: 12px 15px; }
+            .hero { padding: 30px 15px; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container"></div>
 
     <!-- NAVBAR -->
     <header>
@@ -88,7 +143,7 @@
                     <span id="username-display">User</span>
                     <span id="role-badge" class="badge-admin" style="display:none;">ADMIN</span>
                 </div>
-                <button onclick="logout()" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:12px; margin-left:10px;">Logout</button>
+                <button onclick="logout()" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:12px; margin-left:10px;"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
@@ -96,13 +151,13 @@
     <!-- HERO BANNER -->
     <div class="hero">
         <h1>Jual Beli Akun Game Murah & Aman</h1>
-        <p>Platform transaksi akun game terpercaya</p>
+        <p>Platform transaksi akun game terpercaya dengan sistem pembayaran lengkap</p>
     </div>
 
     <!-- MAIN CONTAINER -->
     <div class="container">
 
-        <!-- PANEL ADMIN KHUSUS ADMIN KODE -->
+        <!-- PANEL ADMIN -->
         <div class="admin-panel" id="admin-panel">
             <h3><i class="fa-solid fa-user-gear"></i> Panel Admin - Tambah Akun Jualan</h3>
             <form class="admin-form" onsubmit="addNewAccount(event)">
@@ -111,12 +166,28 @@
                     <option value="Mobile Legends">Mobile Legends</option>
                     <option value="Free Fire">Free Fire</option>
                     <option value="PUBG Mobile">PUBG Mobile</option>
+                    <option value="Valorant">Valorant</option>
                 </select>
                 <input type="text" id="new-title" placeholder="Judul Akun" required>
                 <input type="number" id="new-price" placeholder="Harga (Rp)" required>
                 <input type="url" id="new-img" placeholder="Link Foto Akun (URL Gambar)" required>
-                <button type="submit" class="btn-add-product">+ Tambahkan Ke Katalog</button>
+                <button type="submit" class="btn-add-product"><i class="fa-solid fa-plus"></i> Tambahkan Ke Katalog</button>
             </form>
+        </div>
+
+        <!-- FILTER & PENCARIAN -->
+        <div class="filter-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Cari judul akun atau kode (misal: Mythic, ACC-ML)..." oninput="filterAccounts()">
+            </div>
+            <div class="game-filters" id="game-filters-container">
+                <button class="filter-btn active" onclick="setGameFilter('Semua', this)">Semua Game</button>
+                <button class="filter-btn" onclick="setGameFilter('Mobile Legends', this)">Mobile Legends</button>
+                <button class="filter-btn" onclick="setGameFilter('Free Fire', this)">Free Fire</button>
+                <button class="filter-btn" onclick="setGameFilter('PUBG Mobile', this)">PUBG Mobile</button>
+                <button class="filter-btn" onclick="setGameFilter('Valorant', this)">Valorant</button>
+            </div>
         </div>
 
         <!-- LIST KATALOG AKUN -->
@@ -127,7 +198,7 @@
     <div class="modal" id="auth-modal">
         <!-- FORM LOGIN -->
         <div class="modal-content auth-form" id="form-login-box">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <span class="close-btn" onclick="closeModal('auth-modal')">&times;</span>
             <h2>Login Akun</h2>
 
             <div class="error-message" id="login-error-box">
@@ -137,22 +208,25 @@
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" id="login-username" placeholder="Masukkan username" required>
+                    <input type="text" class="standard-input" id="login-username" placeholder="Masukkan username" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="login-password" placeholder="Masukkan password" required>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="login-password" placeholder="Masukkan password" required>
+                        <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('login-password', this)"></i>
+                    </div>
                 </div>
                 <button type="submit" class="btn-submit">Masuk</button>
             </form>
             <div class="switch-auth">
-                Belum punya akun? <a onclick="switchForm('register')">Daftar Sekarang</a>
+                Belum punya akun? <span onclick="switchForm('register')">Daftar Sekarang</span>
             </div>
         </div>
 
-        <!-- FORM REGISTER (OTOMATIS BUYER) -->
+        <!-- FORM REGISTER -->
         <div class="modal-content auth-form" id="form-register-box" style="display:none;">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <span class="close-btn" onclick="closeModal('auth-modal')">&times;</span>
             <h2>Buat Akun Pembeli</h2>
 
             <div class="error-message" id="reg-error-box">
@@ -162,17 +236,71 @@
             <form onsubmit="handleRegister(event)">
                 <div class="form-group">
                     <label>Username Baru</label>
-                    <input type="text" id="reg-username" placeholder="Buat username" required>
+                    <input type="text" class="standard-input" id="reg-username" placeholder="Buat username" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="reg-password" placeholder="Buat password" required>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="reg-password" placeholder="Buat password" required>
+                        <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('reg-password', this)"></i>
+                    </div>
                 </div>
                 <button type="submit" class="btn-submit">Daftar Akun</button>
             </form>
             <div class="switch-auth">
-                Sudah punya akun? <a onclick="switchForm('login')">Login Saja</a>
+                Sudah punya akun? <span onclick="switchForm('login')">Login Saja</span>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHECKOUT PEMBAYARAN -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('checkout-modal')">&times;</span>
+            <div class="checkout-header">
+                <h3>Konfirmasi Pembayaran</h3>
+                <p id="checkout-product-title">Judul Akun</p>
+                <div id="checkout-product-price" style="font-size: 16px; font-weight: bold; color: var(--accent-color); margin-top: 4px;">Rp 0</div>
+            </div>
+
+            <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-muted);">Pilih Metode Pembayaran:</div>
+            
+            <div class="payment-methods">
+                <label class="payment-option" onclick="selectPayment('QRIS')">
+                    <span><i class="fa-solid fa-qrcode" style="color:var(--accent-color); font-size:16px;"></i> QRIS (Semua E-Wallet & Bank)</span>
+                    <input type="radio" name="payment" value="QRIS" checked>
+                </label>
+                <label class="payment-option" onclick="selectPayment('DANA')">
+                    <span><i class="fa-solid fa-wallet" style="color:#0080ff; font-size:16px;"></i> DANA</span>
+                    <input type="radio" name="payment" value="DANA">
+                </label>
+                <label class="payment-option" onclick="selectPayment('OVO')">
+                    <span><i class="fa-solid fa-wallet" style="color:#800080; font-size:16px;"></i> OVO</span>
+                    <input type="radio" name="payment" value="OVO">
+                </label>
+                <label class="payment-option" onclick="selectPayment('GoPay')">
+                    <span><i class="fa-solid fa-wallet" style="color:#00aa13; font-size:16px;"></i> GoPay</span>
+                    <input type="radio" name="payment" value="GoPay">
+                </label>
+                <label class="payment-option" onclick="selectPayment('ShopeePay')">
+                    <span><i class="fa-solid fa-wallet" style="color:#ee4d2d; font-size:16px;"></i> ShopeePay</span>
+                    <input type="radio" name="payment" value="ShopeePay">
+                </label>
+                <label class="payment-option" onclick="selectPayment('Transfer Bank')">
+                    <span><i class="fa-solid fa-building-columns" style="color:#eab308; font-size:16px;"></i> Transfer Bank (BCA/BRI/Mandiri)</span>
+                    <input type="radio" name="payment" value="Transfer Bank">
+                </label>
+            </div>
+
+            <!-- TAMPILAN QRIS -->
+            <div class="qris-container" id="qris-box">
+                <div style="font-size:12px; font-weight:bold; margin-bottom:5px;">Scan QRIS di bawah ini:</div>
+                <!-- GANTI LINK GAMBAR QRIS DI BAWAH INI DENGAN QRIS ANDA -->
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" class="qris-img" alt="QRIS Code">
+                <div class="qris-note">Scan pakai BCA, DANA, OVO, GoPay, ShopeePay, dll.</div>
+            </div>
+
+            <button class="btn-submit" onclick="proceedToWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Lanjutkan Pembayaran ke WhatsApp</button>
         </div>
     </div>
 
@@ -183,7 +311,6 @@
         // ==========================================
         const SELLER_WHATSAPP = "6285834368903"; // GANTI DENGAN NOMOR WA KAMU (Gunakan awalan 62)
 
-        // AKUN ADMIN RAHASIA (HANYA BISA LOGIN LEWAT SINI)
         const ADMIN_CREDENTIALS = {
             username: "admin123",
             password: "ganzgggimang"
@@ -193,11 +320,14 @@
         let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
 
         let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
-            { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
-            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500" }
+            { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500", status: "tersedia" },
+            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", status: "tersedia" }
         ];
 
         let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
+        let currentSelectedGame = 'Semua';
+        let selectedPaymentMethod = 'QRIS';
+        let activeCheckoutData = null;
 
         function saveToStorage() {
             localStorage.setItem('users_database', JSON.stringify(registeredUsers));
@@ -205,23 +335,57 @@
             localStorage.setItem('session_user', JSON.stringify(currentUser));
         }
 
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${message}`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
         function displayAccounts() {
             const listContainer = document.getElementById('account-list');
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+
+            let filtered = accounts.filter(acc => {
+                const matchGame = currentSelectedGame === 'Semua' || acc.game === currentSelectedGame;
+                const matchSearch = acc.title.toLowerCase().includes(searchQuery) || acc.id.toLowerCase().includes(searchQuery);
+                return matchGame && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada akun yang ditemukan.</div>`;
+                return;
+            }
             
-            listContainer.innerHTML = accounts.map(acc => `
+            listContainer.innerHTML = filtered.map(acc => `
                 <div class="account-card">
                     <div class="card-img-wrapper">
-                        <img src="${acc.img}" class="account-img">
+                        <img src="${acc.img}" class="account-img" alt="Akun">
                         <div class="game-badge">${acc.game}</div>
+                        <div class="status-badge ${acc.status}">${acc.status === 'tersedia' ? 'Tersedia' : 'Terjual'}</div>
                     </div>
                     <div class="account-info">
+                        <div class="account-id">${acc.id}</div>
                         <div class="account-title">${acc.title}</div>
                         <div class="account-price">Rp ${acc.price.toLocaleString('id-ID')}</div>
                         
-                        ${currentUser && currentUser.role === 'admin' ? 
-                            `<button class="btn-delete" onclick="deleteAccount('${acc.id}')"><i class="fa-solid fa-trash"></i> Hapus Akun</button>` : 
-                            `<button class="btn-buy" onclick="buyViaWhatsApp('${acc.id}', '${acc.title}', ${acc.price})"><i class="fa-brands fa-whatsapp"></i> Beli Sekarang</button>`
-                        }
+                        <div class="card-actions">
+                            ${currentUser && currentUser.role === 'admin' ? `
+                                <button class="btn-toggle-status" onclick="toggleStatus('${acc.id}')"><i class="fa-solid fa-rotate"></i> Ubah Status (${acc.status === 'tersedia' ? 'Jual' : 'Buka'})</button>
+                                <button class="btn-delete" onclick="deleteAccount('${acc.id}')"><i class="fa-solid fa-trash"></i> Hapus Akun</button>
+                            ` : `
+                                ${acc.status === 'tersedia' ? 
+                                    `<button class="btn-buy" onclick="openCheckout('${acc.id}', '${acc.title}', ${acc.price})"><i class="fa-solid fa-cart-shopping"></i> Beli Sekarang</button>` : 
+                                    `<button class="btn-buy" style="background: #475569; cursor: not-allowed;" disabled><i class="fa-solid fa-ban"></i> Terjual</button>`
+                                }
+                            `}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -245,15 +409,28 @@
             }
         }
 
-        function openModal(type) {
-            document.getElementById('login-error-box').style.display = 'none';
-            document.getElementById('reg-error-box').style.display = 'none';
-            switchForm(type);
-            document.getElementById('auth-modal').style.display = 'flex';
+        function setGameFilter(game, element) {
+            currentSelectedGame = game;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            displayAccounts();
         }
 
-        function closeModal() {
-            document.getElementById('auth-modal').style.display = 'none';
+        function filterAccounts() {
+            displayAccounts();
+        }
+
+        function openModal(modalId) {
+            if(modalId === 'auth-modal') {
+                document.getElementById('login-error-box').style.display = 'none';
+                document.getElementById('reg-error-box').style.display = 'none';
+                switchForm('login');
+            }
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
         function switchForm(type) {
@@ -266,7 +443,19 @@
             }
         }
 
-        // AKUN BARU SELALU OTOMATIS BUYER
+        function togglePasswordVisibility(inputId, iconElement) {
+            const inputField = document.getElementById(inputId);
+            if (inputField.type === 'password') {
+                inputField.type = 'text';
+                iconElement.classList.remove('fa-eye');
+                iconElement.classList.add('fa-eye-slash');
+            } else {
+                inputField.type = 'password';
+                iconElement.classList.remove('fa-eye-slash');
+                iconElement.classList.add('fa-eye');
+            }
+        }
+
         function handleRegister(event) {
             event.preventDefault();
             const usn = document.getElementById('reg-username').value.trim();
@@ -280,7 +469,6 @@
             }
 
             const isExist = registeredUsers.some(u => u.username.toLowerCase() === usn.toLowerCase());
-
             if (isExist) {
                 regError.innerText = "Username sudah dipakai orang lain!";
                 regError.style.display = 'block';
@@ -292,30 +480,26 @@
             currentUser = newUser;
             saveToStorage();
 
-            alert(`Pendaftaran Berhasil! Selamat datang ${usn}`);
-            closeModal();
+            closeModal('auth-modal');
             displayAccounts();
+            showToast(`Pendaftaran Berhasil! Selamat datang ${usn}`);
         }
 
-        // VALIDASI LOGIN KHUSUS ADMIN ATAU BUYER
         function handleLogin(event) {
             event.preventDefault();
-
             const inputUsn = document.getElementById('login-username').value.trim();
             const inputPass = document.getElementById('login-password').value;
             const errorBox = document.getElementById('login-error-box');
 
-            // Cek jika yang login adalah Admin Rahasia
             if (inputUsn === ADMIN_CREDENTIALS.username && inputPass === ADMIN_CREDENTIALS.password) {
                 currentUser = { username: "Admin", role: "admin" };
                 saveToStorage();
-                closeModal();
+                closeModal('auth-modal');
                 displayAccounts();
-                alert("Login Admin Berhasil!");
+                showToast("Login Admin Berhasil!");
                 return;
             }
 
-            // Cek pengguna biasa (Buyer)
             const userMatch = registeredUsers.find(
                 user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
             );
@@ -323,31 +507,57 @@
             if (userMatch) {
                 currentUser = userMatch;
                 saveToStorage();
-                closeModal();
+                closeModal('auth-modal');
                 displayAccounts();
-                alert(`Login Berhasil! Selamat datang ${currentUser.username}`);
+                showToast(`Login Berhasil! Selamat datang ${currentUser.username}`);
             } else {
                 errorBox.style.display = 'block';
             }
         }
 
-        // TRANSAKSI LANGSUNG KE WHATSAPP
-        function buyViaWhatsApp(id, title, price) {
+        // CHECKOUT & PEMBAYARAN
+        function openCheckout(id, title, price) {
             if (!currentUser) {
-                alert("Silakan Login/Buat Akun terlebih dahulu untuk membeli!");
-                openModal('login');
+                showToast("Silakan Login terlebih dahulu untuk membeli!", "error");
+                openModal('auth-modal');
                 return;
             }
 
+            activeCheckoutData = { id, title, price };
+            document.getElementById('checkout-product-title').innerText = title;
+            document.getElementById('checkout-product-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
+            
+            // Set default QRIS selected
+            document.querySelector('input[name="payment"][value="QRIS"]').checked = true;
+            selectPayment('QRIS');
+
+            openModal('checkout-modal');
+        }
+
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            const qrisBox = document.getElementById('qris-box');
+            if (method === 'QRIS') {
+                qrisBox.style.display = 'block';
+            } else {
+                qrisBox.style.display = 'none';
+            }
+        }
+
+        function proceedToWhatsApp() {
+            if (!activeCheckoutData) return;
+
             const message = `Halo Admin Ganz Store! Saya ingin membeli akun berikut:%0A%0A` +
-                            `📌 *Kode Akun:* ${id}%0A` +
-                            `🎮 *Nama Akun:* ${title}%0A` +
-                            `💰 *Harga:* Rp ${price.toLocaleString('id-ID')}%0A%0A` +
+                            `📌 *Kode Akun:* ${activeCheckoutData.id}%0A` +
+                            `🎮 *Nama Akun:* ${activeCheckoutData.title}%0A` +
+                            `💰 *Harga:* Rp ${activeCheckoutData.price.toLocaleString('id-ID')}%0A` +
+                            `💳 *Metode Pembayaran:* ${selectedPaymentMethod}%0A%0A` +
                             `👤 *Username Pembeli:* ${currentUser.username}%0A%0A` +
-                            `Mohon diproses, terima kasih!`;
+                            `Mohon instruksi selanjutnya, terima kasih!`;
 
             const waUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${message}`;
             window.open(waUrl, '_blank');
+            closeModal('checkout-modal');
         }
 
         function addNewAccount(e) {
@@ -358,14 +568,25 @@
                 game: document.getElementById('new-game').value,
                 title: document.getElementById('new-title').value,
                 price: parseInt(document.getElementById('new-price').value),
-                img: document.getElementById('new-img').value
+                img: document.getElementById('new-img').value,
+                status: "tersedia"
             };
 
             accounts.push(newAcc);
             saveToStorage();
             displayAccounts();
             e.target.reset();
-            alert("Produk berhasil ditambahkan!");
+            showToast("Produk berhasil ditambahkan!");
+        }
+
+        function toggleStatus(accId) {
+            const acc = accounts.find(a => a.id === accId);
+            if(acc) {
+                acc.status = acc.status === 'tersedia' ? 'terjual' : 'tersedia';
+                saveToStorage();
+                displayAccounts();
+                showToast(`Status akun ${accId} diubah menjadi ${acc.status}`);
+            }
         }
 
         function deleteAccount(accId) {
@@ -373,6 +594,7 @@
                 accounts = accounts.filter(acc => acc.id !== accId);
                 saveToStorage();
                 displayAccounts();
+                showToast("Akun berhasil dihapus", "error");
             }
         }
 
@@ -381,12 +603,14 @@
                 currentUser = null;
                 saveToStorage();
                 displayAccounts();
+                showToast("Berhasil logout");
             }
         }
 
         window.onclick = function(e) {
-            const modal = document.getElementById('auth-modal');
-            if (e.target === modal) closeModal();
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
         }
 
         displayAccounts();
