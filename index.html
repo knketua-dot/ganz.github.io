@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Akun Game - Trusted Gaming Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --bg-dark: #0f172a; --card-bg: #1e293b; --accent-color: #06b6d4; --text-main: #f8fafc; --text-muted: #94a3b8; --danger: #ef4444; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding-bottom: 50px; }
+
+        header { background-color: #0b1120; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 5%; max-width: 1200px; margin: auto; gap: 15px; }
+        .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-decoration: none; white-space: nowrap; }
+
+        /* AUTH & PROFILE */
+        .auth-buttons { display: flex; gap: 10px; align-items: center; }
+        .btn-login { padding: 8px 16px; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .user-profile { display: none; align-items: center; gap: 12px; font-weight: bold; color: var(--accent-color); }
+        .badge-admin { background: #eab308; color: #000; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+        /* HERO & CONTAINER */
+        .hero { background: linear-gradient(180deg, #164e63 0%, var(--bg-dark) 100%); text-align: center; padding: 35px 20px; margin-bottom: 20px; }
+        .hero h1 { font-size: 26px; color: #fff; margin-bottom: 8px; }
+        .hero p { font-size: 14px; color: var(--text-muted); }
+        .container { max-width: 1200px; margin: auto; padding: 0 15px; }
+
+        /* PANEL ADMIN */
+        .admin-panel {
+            display: none;
+            background: #1e293b;
+            border: 1px solid #06b6d4;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .admin-panel h3 { color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .admin-form input, .admin-form select { padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; outline: none; }
+        .btn-add-product { grid-column: 1 / -1; padding: 12px; background: #22c55e; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* GRID AKUN */
+        .account-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .account-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; position: relative; }
+        .card-img-wrapper { position: relative; width: 100%; height: 160px; }
+        .account-img { width: 100%; height: 100%; object-fit: cover; }
+        .game-badge { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.85); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+        .account-info { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
+        .account-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+        .account-price { font-size: 18px; color: var(--accent-color); font-weight: 800; margin-bottom: 12px; }
+        .btn-buy { width: 100%; padding: 10px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: auto; }
+        .btn-delete { width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 14px; margin-top: 5px; }
+
+        /* MODAL LOGIN */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--card-bg); border: 1px solid #334155; width: 100%; max-width: 380px; border-radius: 12px; padding: 25px; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
+        
+        .auth-form h2 { margin-bottom: 15px; text-align: center; color: white; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .error-message { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; }
+        .demo-info { background: rgba(6, 182, 212, 0.1); border: 1px border-dashed var(--accent-color); padding: 10px; border-radius: 6px; font-size: 12px; color: var(--accent-color); margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GAME STORE</a>
+
+            <div class="auth-buttons" id="auth-area">
+                <button class="btn-login" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+            </div>
+            
+            <div class="user-profile" id="user-area">
+                <div>
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span id="username-display">User</span>
+                    <span id="role-badge" class="badge-admin" style="display:none;">ADMIN</span>
+                </div>
+                <button onclick="logout()" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:12px; margin-left:10px;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <h1>Jual Beli Akun Game Murah & Aman</h1>
+        <p>Platform transaksi akun game terpercaya</p>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- PANEL ADMIN (HANYA MUNCUL JIKA ADMIN LOGIN) -->
+        <div class="admin-panel" id="admin-panel">
+            <h3><i class="fa-solid fa-user-gear"></i> Panel Admin - Tambah Akun Jualan</h3>
+            <form class="admin-form" onsubmit="addNewAccount(event)">
+                <input type="text" id="new-id" placeholder="Kode Akun (misal: ACC-ML03)" required>
+                <select id="new-game" required>
+                    <option value="Mobile Legends">Mobile Legends</option>
+                    <option value="Free Fire">Free Fire</option>
+                    <option value="PUBG Mobile">PUBG Mobile</option>
+                </select>
+                <input type="text" id="new-title" placeholder="Judul Akun" required>
+                <input type="number" id="new-price" placeholder="Harga (Rp)" required>
+                <input type="url" id="new-img" placeholder="Link Foto Akun (URL Gambar)" required>
+                <button type="submit" class="btn-add-product">+ Tambahkan Ke Katalog</button>
+            </form>
+        </div>
+
+        <!-- LIST KATALOG AKUN -->
+        <div class="account-grid" id="account-list"></div>
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content auth-form">
+            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+            <h2>Login Akun</h2>
+
+            <div class="demo-info">
+
+            <div class="error-message" id="error-box">
+                <i class="fa-solid fa-circle-exclamation"></i> Username atau Password salah!
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="login-username" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="btn-submit">Masuk</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA USER VALIDASI
+        const registeredUsers = [
+            { username: "admin", password: "ganzgggimang", role: "admin" },
+        ];
+
+        // DATA KATALOG
+        let accounts = [
+            { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
+            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500" }
+        ];
+
+        let currentUser = null;
+
+        // RENDER AKUN TERGANTUNG ROLE
+        function displayAccounts() {
+            const listContainer = document.getElementById('account-list');
+            
+            listContainer.innerHTML = accounts.map(acc => `
+                <div class="account-card">
+                    <div class="card-img-wrapper">
+                        <img src="${acc.img}" class="account-img">
+                        <div class="game-badge">${acc.game}</div>
+                    </div>
+                    <div class="account-info">
+                        <div class="account-title">${acc.title}</div>
+                        <div class="account-price">Rp ${acc.price.toLocaleString('id-ID')}</div>
+                        
+                        ${currentUser && currentUser.role === 'admin' ? 
+                            `<button class="btn-delete" onclick="deleteAccount('${acc.id}')"><i class="fa-solid fa-trash"></i> Hapus Akun</button>` : 
+                            `<button class="btn-buy" onclick="buyItem('${acc.id}')">Beli Sekarang</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // FUNGSI MODAL
+        function openLoginModal() {
+            document.getElementById('error-box').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+
+        // FUNGSI LOGIN
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const inputUsn = document.getElementById('login-username').value.trim();
+            const inputPass = document.getElementById('login-password').value;
+            const errorBox = document.getElementById('error-box');
+
+            const userMatch = registeredUsers.find(
+                user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
+            );
+
+            if (userMatch) {
+                currentUser = userMatch;
+                
+                document.getElementById('auth-area').style.display = 'none';
+                document.getElementById('user-area').style.display = 'flex';
+                document.getElementById('username-display').innerText = currentUser.username;
+                
+                if (currentUser.role === 'admin') {
+                    document.getElementById('role-badge').style.display = 'inline-block';
+                    document.getElementById('admin-panel').style.display = 'block';
+                } else {
+                    document.getElementById('role-badge').style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'none';
+                }
+
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                closeLoginModal();
+                displayAccounts();
+
+                alert(`Login Berhasil! Selamat datang ${currentUser.username}`);
+            } else {
+                errorBox.style.display = 'block';
+            }
+        }
+
+        // TAMBAH PRODUK KHUSUS ADMIN
+        function addNewAccount(e) {
+            e.preventDefault();
+            
+            const newAcc = {
+                id: document.getElementById('new-id').value,
+                game: document.getElementById('new-game').value,
+                title: document.getElementById('new-title').value,
+                price: parseInt(document.getElementById('new-price').value),
+                img: document.getElementById('new-img').value
+            };
+
+            accounts.push(newAcc);
+            displayAccounts();
+            e.target.reset();
+            alert("Produk berhasil ditambahkan!");
+        }
+
+        // HAPUS PRODUK KHUSUS ADMIN
+        function deleteAccount(accId) {
+            if (confirm(`Yakin ingin menghapus akun ID: ${accId}?`)) {
+                accounts = accounts.filter(acc => acc.id !== accId);
+                displayAccounts();
+            }
+        }
+
+        // LOGOUT
+        function logout() {
+            if (confirm("Mau keluar dari akun?")) {
+                currentUser = null;
+                document.getElementById('auth-area').style.display = 'flex';
+                document.getElementById('user-area').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'none';
+                displayAccounts();
+            }
+        }
+
+        function buyItem(accId) {
+            if (!currentUser) {
+                alert("Login terlebih dahulu untuk melakukan transaksi!");
+                openLoginModal();
+                return;
+            }
+            alert(`Lanjut transaksi untuk ID: ${accId} via WhatsApp!`);
+        }
+
+        window.onclick = function(e) {
+            const modal = document.getElementById('login-modal');
+            if (e.target === modal) closeLoginModal();
+        }
+
+        displayAccounts();
+    </script>
+</body>
+</html>
