@@ -73,12 +73,11 @@
         .btn-delete { width: 100%; padding: 8px; background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
         .btn-toggle-status { width: 100%; padding: 8px; background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-        /* MODAL GENERAL & SETTINGS MENU LIST */
+        /* MODAL GENERAL */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
         .modal-content { background: var(--card-bg); border: 1px solid var(--border); width: 100%; max-width: 420px; border-radius: 16px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: var(--text-muted); }
         
-        /* SETTING MENU ITEM STYLE */
         .setting-menu-btn { width: 100%; padding: 12px 14px; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 13px; text-align: left; transition: 0.2s; }
         .setting-menu-btn:hover { border-color: var(--accent-color); background: rgba(6, 182, 212, 0.05); }
 
@@ -97,7 +96,7 @@
         .switch-auth { text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
         .switch-auth span { color: var(--accent-color); font-weight: bold; cursor: pointer; }
 
-        /* CHECKOUT MODAL STYLES */
+        /* CHECKOUT MODAL */
         .checkout-header { text-align: center; margin-bottom: 20px; }
         .checkout-header h3 { font-size: 18px; color: white; margin-bottom: 4px; }
         .checkout-header p { font-size: 13px; color: var(--accent-color); font-weight: bold; }
@@ -108,12 +107,11 @@
         .payment-option span { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
         .payment-option input { accent-color: var(--accent-color); }
 
-        /* QRIS CONTAINER */
         .qris-container { display: none; text-align: center; margin-bottom: 20px; background: var(--bg-dark); padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
         .qris-img { width: 180px; height: 180px; object-fit: contain; background: white; padding: 8px; border-radius: 8px; margin: 10px auto; display: block; }
         .qris-note { font-size: 11px; color: var(--text-muted); }
 
-        /* TOAST NOTIFICATION */
+        /* TOAST */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: var(--card-bg); border: 1px solid var(--border); color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease forwards; }
         .toast.success { border-color: var(--success); }
@@ -121,24 +119,15 @@
         .toast.error { border-color: var(--danger); }
         .toast.error i { color: var(--danger); }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        /* RESPONSIVE */
-        @media(max-width: 480px) {
-            .navbar { padding: 12px 15px; }
-            .hero { padding: 30px 15px; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container"></div>
 
-    <!-- NAVBAR -->
     <header>
         <div class="navbar">
             <div class="logo-area">
-                <!-- TOMBOL GERIGI SETTINGS DI KIRI ATAS -->
                 <button class="btn-settings-gear" onclick="openModal('settings-modal')" title="Pengaturan Aplikasi">
                     <i class="fa-solid fa-gear"></i>
                 </button>
@@ -161,16 +150,12 @@
         </div>
     </header>
 
-    <!-- HERO BANNER -->
     <div class="hero">
         <h1>Jual Beli Akun Game Murah & Aman</h1>
         <p>Platform transaksi akun game terpercaya dengan sistem pembayaran lengkap</p>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="container">
-
-        <!-- PANEL ADMIN -->
         <div class="admin-panel" id="admin-panel">
             <h3><i class="fa-solid fa-user-gear"></i> Panel Admin - Tambah Akun Jualan</h3>
             <form class="admin-form" onsubmit="addNewAccount(event)">
@@ -188,11 +173,10 @@
             </form>
         </div>
 
-        <!-- FILTER & PENCARIAN -->
         <div class="filter-section">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Cari judul akun atau kode (misal: Mythic, ACC-ML)..." oninput="filterAccounts()">
+                <input type="text" id="search-input" placeholder="Cari judul akun atau kode..." oninput="filterAccounts()">
             </div>
             <div class="game-filters" id="game-filters-container">
                 <button class="filter-btn active" onclick="setGameFilter('Semua', this)">Semua Game</button>
@@ -203,11 +187,10 @@
             </div>
         </div>
 
-        <!-- LIST KATALOG AKUN -->
         <div class="account-grid" id="account-list"></div>
     </div>
 
-    <!-- MODAL PENGATURAN / SETTINGS UTAMA (IKON GERIGI) -->
+    <!-- MODAL SETTINGS -->
     <div class="modal" id="settings-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('settings-modal')">&times;</span>
@@ -215,209 +198,111 @@
                 <h3 style="color: var(--accent-color);"><i class="fa-solid fa-gear"></i> Pengaturan Aplikasi</h3>
                 <p>Sesuaikan preferensi dan informasi akun Anda</p>
             </div>
-
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button class="setting-menu-btn" onclick="openSubModal('setting-account')">
                     <span><i class="fa-solid fa-user" style="color: var(--accent-color); width: 20px;"></i> Akun & Profil Saya</span>
                     <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
                 </button>
-
                 <button class="setting-menu-btn" onclick="openSubModal('setting-theme')">
                     <span><i class="fa-solid fa-palette" style="color: var(--accent-color); width: 20px;"></i> Tema & Tampilan</span>
                     <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
                 </button>
-
-                <button class="setting-menu-btn" onclick="openSubModal('setting-notif')">
-                    <span><i class="fa-solid fa-bell" style="color: var(--accent-color); width: 20px;"></i> Notifikasi & Suara</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
-                </button>
-
-                <button class="setting-menu-btn" onclick="openSubModal('setting-privacy')">
-                    <span><i class="fa-solid fa-shield-halved" style="color: var(--accent-color); width: 20px;"></i> Privasi & Keamanan</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
-                </button>
-
                 <button class="setting-menu-btn" onclick="openSubModal('setting-rules')">
-                    <span><i class="fa-solid fa-book-open" style="color: var(--accent-color); width: 20px;"></i> Peraturan & Ketentuan Toko</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
-                </button>
-
-                <button class="setting-menu-btn" onclick="openSubModal('setting-about')">
-                    <span><i class="fa-solid fa-circle-info" style="color: var(--accent-color); width: 20px;"></i> Tentang Aplikasi</span>
+                    <span><i class="fa-solid fa-book-open" style="color: var(--accent-color); width: 20px;"></i> Peraturan Toko</span>
                     <i class="fa-solid fa-chevron-right" style="font-size: 11px; color: var(--text-muted);"></i>
                 </button>
             </div>
-
             <button class="btn-submit" onclick="closeModal('settings-modal')" style="margin-top: 20px;">Tutup</button>
         </div>
     </div>
 
-    <!-- SUB-MODAL SETTINGS: AKUN -->
+    <!-- SUB-MODAL AKUN -->
     <div class="modal" id="setting-account">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('setting-account')">&times;</span>
-            <div class="checkout-header">
-                <h3>Pengaturan Akun</h3>
-                <p>Kelola profil dan keamanan sandi anda</p>
-            </div>
+            <div class="checkout-header"><h3>Pengaturan Akun</h3></div>
             <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px;" id="account-info-box">
-                Status: Belum Login. Silakan Login terlebih dahulu untuk melihat informasi akun Anda.
+                Status: Belum Login.
             </div>
             <button class="btn-submit" onclick="closeModal('setting-account')">Kembali</button>
         </div>
     </div>
 
-    <!-- SUB-MODAL SETTINGS: TEMA -->
+    <!-- SUB-MODAL TEMA -->
     <div class="modal" id="setting-theme">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('setting-theme')">&times;</span>
-            <div class="checkout-header">
-                <h3>Tema & Tampilan</h3>
-                <p>Pilih warna tema aksen website</p>
-            </div>
+            <div class="checkout-header"><h3>Tema & Tampilan</h3></div>
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: white;">Warna Utama Website:</div>
+                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: white;">Warna Utama:</div>
                 <div style="display: flex; gap: 12px;">
-                    <button onclick="changeThemeColor('#06b6d4', '#164e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4; border: 2px solid white; cursor: pointer;" title="Cyan"></button>
-                    <button onclick="changeThemeColor('#22c55e', '#064e3b')" style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 2px solid white; cursor: pointer;" title="Hijau"></button>
-                    <button onclick="changeThemeColor('#eab308', '#713f12')" style="width: 36px; height: 36px; border-radius: 50%; background: #eab308; border: 2px solid white; cursor: pointer;" title="Kuning"></button>
-                    <button onclick="changeThemeColor('#ec4899', '#831843')" style="width: 36px; height: 36px; border-radius: 50%; background: #ec4899; border: 2px solid white; cursor: pointer;" title="Pink"></button>
+                    <button onclick="changeThemeColor('#06b6d4', '#164e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#22c55e', '#064e3b')" style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#eab308', '#713f12')" style="width: 36px; height: 36px; border-radius: 50%; background: #eab308; border: 2px solid white; cursor: pointer;"></button>
                 </div>
             </div>
-            <button class="btn-submit" onclick="closeModal('setting-theme')">Simpan Tema</button>
+            <button class="btn-submit" onclick="closeModal('setting-theme')">Simpan</button>
         </div>
     </div>
 
-    <!-- SUB-MODAL SETTINGS: NOTIFIKASI -->
-    <div class="modal" id="setting-notif">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('setting-notif')">&times;</span>
-            <div class="checkout-header">
-                <h3>Notifikasi & Suara</h3>
-                <p>Atur preferensi pemberitahuan</p>
-            </div>
-            <div style="background: var(--bg-dark); padding: 15px; border-radius: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-                <span>Munculkan Toast Notifikasi</span>
-                <input type="checkbox" id="notif-toggle" checked style="width: 18px; height: 18px; accent-color: var(--accent-color);" onclick="showToast('Pengaturan notifikasi diperbarui!')">
-            </div>
-            <button class="btn-submit" onclick="closeModal('setting-notif')">Tutup</button>
-        </div>
-    </div>
-
-    <!-- SUB-MODAL SETTINGS: PRIVASI -->
-    <div class="modal" id="setting-privacy">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('setting-privacy')">&times;</span>
-            <div class="checkout-header">
-                <h3>Privasi & Keamanan</h3>
-                <p>Keamanan data lokal platform</p>
-            </div>
-            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px; line-height: 1.5;">
-                Data akun dan sesi login Anda disimpan secara lokal dan aman di dalam browser perangkat Anda menggunakan enkripsi memori lokal (localStorage).
-            </div>
-            <button class="btn-submit" onclick="closeModal('setting-privacy')">Mengerti</button>
-        </div>
-    </div>
-
-    <!-- SUB-MODAL SETTINGS: PERATURAN -->
+    <!-- SUB-MODAL PERATURAN -->
     <div class="modal" id="setting-rules">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('setting-rules')">&times;</span>
-            <div class="checkout-header">
-                <h3>Peraturan Toko</h3>
-                <p>Syarat & Ketentuan transaksi</p>
-            </div>
-            <div style="font-size: 13px; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
-                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-color);">
-                    <strong style="color:white; display:block; margin-bottom:2px;">1. Wajib Video Unboxing</strong> Wajib rekam video tanpa putus saat pertama kali login ke akun.
-                </div>
-                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);">
-                    <strong style="color:white; display:block; margin-bottom:2px;">2. Garansi 1x24 Jam</strong> Batas klaim kendala akun adalah 1 hari setelah data diterima.
-                </div>
-                <div style="background: var(--bg-dark); padding: 10px; border-radius: 8px; border-left: 3px solid var(--danger);">
-                    <strong style="color:white; display:block; margin-bottom:2px;">3. Tanggung Jawab</strong> Dilarang menggunakan cheat/script ilegal setelah akun dipegang.
-                </div>
+            <div class="checkout-header"><h3>Peraturan Toko</h3></div>
+            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                Wajib video unboxing saat pertama kali login ke akun game yang dibeli.
             </div>
             <button class="btn-submit" onclick="closeModal('setting-rules')">Tutup</button>
         </div>
     </div>
 
-    <!-- SUB-MODAL SETTINGS: TENTANG APLIKASI -->
-    <div class="modal" id="setting-about">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('setting-about')">&times;</span>
-            <div class="checkout-header">
-                <h3>Tentang Aplikasi</h3>
-                <p>Ganz Store v2.5.0</p>
-            </div>
-            <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; line-height: 1.6;">
-                <i class="fa-solid fa-gamepad" style="font-size: 32px; color: var(--accent-color); margin-bottom: 8px; display: block;"></i>
-                Platform jual beli akun game terpercaya, aman, dan cepat. Dibangun khusus untuk memberikan pengalaman transaksi terbaik bagi gamers Indonesia.
-            </div>
-            <button class="btn-submit" onclick="closeModal('setting-about')">Tutup</button>
-        </div>
-    </div>
-
-    <!-- MODAL LOGIN / REGISTER -->
+    <!-- MODAL AUTH -->
     <div class="modal" id="auth-modal">
-        <!-- FORM LOGIN -->
         <div class="modal-content auth-form" id="form-login-box">
             <span class="close-btn" onclick="closeModal('auth-modal')">&times;</span>
             <h2>Login Akun</h2>
-
-            <div class="error-message" id="login-error-box">
-                <i class="fa-solid fa-circle-exclamation"></i> Username atau Password salah!
-            </div>
-
+            <div class="error-message" id="login-error-box"><i class="fa-solid fa-circle-exclamation"></i> Username/Password salah!</div>
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" class="standard-input" id="login-username" placeholder="Masukkan username" required>
+                    <input type="text" class="standard-input" id="login-username" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="login-password" placeholder="Masukkan password" required>
+                        <input type="password" id="login-password" required>
                         <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('login-password', this)"></i>
                     </div>
                 </div>
                 <button type="submit" class="btn-submit">Masuk</button>
             </form>
-            <div class="switch-auth">
-                Belum punya akun? <span onclick="switchForm('register')">Daftar Sekarang</span>
-            </div>
+            <div class="switch-auth">Belum punya akun? <span onclick="switchForm('register')">Daftar</span></div>
         </div>
 
-        <!-- FORM REGISTER -->
         <div class="modal-content auth-form" id="form-register-box" style="display:none;">
             <span class="close-btn" onclick="closeModal('auth-modal')">&times;</span>
-            <h2>Buat Akun Pembeli</h2>
-
-            <div class="error-message" id="reg-error-box">
-                <i class="fa-solid fa-circle-exclamation"></i> Username sudah dipakai!
-            </div>
-
+            <h2>Daftar Akun</h2>
+            <div class="error-message" id="reg-error-box"><i class="fa-solid fa-circle-exclamation"></i> Username sudah dipakai!</div>
             <form onsubmit="handleRegister(event)">
                 <div class="form-group">
                     <label>Username Baru</label>
-                    <input type="text" class="standard-input" id="reg-username" placeholder="Buat username" required>
+                    <input type="text" class="standard-input" id="reg-username" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="reg-password" placeholder="Buat password" required>
+                        <input type="password" id="reg-password" required>
                         <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('reg-password', this)"></i>
                     </div>
                 </div>
-                <button type="submit" class="btn-submit">Daftar Akun</button>
+                <button type="submit" class="btn-submit">Daftar</button>
             </form>
-            <div class="switch-auth">
-                Sudah punya akun? <span onclick="switchForm('login')">Login Saja</span>
-            </div>
+            <div class="switch-auth">Sudah punya akun? <span onclick="switchForm('login')">Login</span></div>
         </div>
     </div>
 
-    <!-- MODAL CHECKOUT PEMBAYARAN -->
+    <!-- MODAL CHECKOUT -->
     <div class="modal" id="checkout-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('checkout-modal')">&times;</span>
@@ -426,84 +311,33 @@
                 <p id="checkout-product-title">Judul Akun</p>
                 <div id="checkout-product-price" style="font-size: 16px; font-weight: bold; color: var(--accent-color); margin-top: 4px;">Rp 0</div>
             </div>
-
-            <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-muted);">Pilih Metode Pembayaran:</div>
-            
             <div class="payment-methods">
                 <label class="payment-option" onclick="selectPayment('QRIS')">
-                    <span><i class="fa-solid fa-qrcode" style="color:var(--accent-color); font-size:16px;"></i> QRIS (Semua E-Wallet & Bank)</span>
+                    <span><i class="fa-solid fa-qrcode" style="color:var(--accent-color);"></i> QRIS</span>
                     <input type="radio" name="payment" value="QRIS" checked>
                 </label>
                 <label class="payment-option" onclick="selectPayment('DANA')">
-                    <span><i class="fa-solid fa-wallet" style="color:#0080ff; font-size:16px;"></i> DANA</span>
+                    <span><i class="fa-solid fa-wallet" style="color:#0080ff;"></i> DANA</span>
                     <input type="radio" name="payment" value="DANA">
                 </label>
-                <label class="payment-option" onclick="selectPayment('OVO')">
-                    <span><i class="fa-solid fa-wallet" style="color:#800080; font-size:16px;"></i> OVO</span>
-                    <input type="radio" name="payment" value="OVO">
-                </label>
-                <label class="payment-option" onclick="selectPayment('GoPay')">
-                    <span><i class="fa-solid fa-wallet" style="color:#00aa13; font-size:16px;"></i> GoPay</span>
-                    <input type="radio" name="payment" value="GoPay">
-                </label>
-                <label class="payment-option" onclick="selectPayment('ShopeePay')">
-                    <span><i class="fa-solid fa-wallet" style="color:#ee4d2d; font-size:16px;"></i> ShopeePay</span>
-                    <input type="radio" name="payment" value="ShopeePay">
-                </label>
-                <label class="payment-option" onclick="selectPayment('Transfer Bank')">
-                    <span><i class="fa-solid fa-building-columns" style="color:#eab308; font-size:16px;"></i> Transfer Bank (BCA/BRI/Mandiri)</span>
-                    <input type="radio" name="payment" value="Transfer Bank">
-                </label>
             </div>
-
-            <!-- TAMPILAN QRIS -->
-            <div class="qris-container" id="qris-box">
-                <div style="font-size:12px; font-weight:bold; margin-bottom:5px;">Scan QRIS di bawah ini:</div>
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" class="qris-img" alt="QRIS Code">
-                <div class="qris-note">Scan pakai BCA, DANA, OVO, GoPay, ShopeePay, dll.</div>
+            <div class="qris-container" id="qris-box" style="display: block;">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" class="qris-img" alt="QRIS">
             </div>
-
-            <button class="btn-submit" onclick="proceedToWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Lanjutkan Pembayaran ke WhatsApp</button>
+            <button class="btn-submit" onclick="proceedToWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Lanjutkan ke WhatsApp</button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC & FIREBASE SDK -->
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBZvHhSl-Co4R-8rY1s7Z3Drh3OQqqWI2g",
-        authDomain: "ganzwe-6e80e.firebaseapp.com",
-        projectId: "ganzwe-6e80e",
-        storageBucket: "ganzwe-6e80e.firebasestorage.app",
-        messagingSenderId: "253181826067",
-        appId: "1:253181826067:web:f35fffc5311d8ddb01dbe6",
-        measurementId: "G-FHEFH9EWBD"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-    </script>
-
+    <!-- SCRIPT UTAMA -->
     <script>
         const SELLER_WHATSAPP = "6285834368903";
-
-        const ADMIN_CREDENTIALS = {
-            username: "admin123",
-            password: "ganzgggimang"
-        };
+        const ADMIN_CREDENTIALS = { username: "admin123", password: "ganzgggimang" };
 
         let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
-
         let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
             { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500", status: "tersedia" },
             { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", status: "tersedia" }
         ];
-
         let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
         let currentSelectedGame = 'Semua';
         let selectedPaymentMethod = 'QRIS';
@@ -521,16 +355,12 @@
             toast.className = `toast ${type}`;
             toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${message}`;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.animation = 'slideIn 0.3s ease reverse forwards';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.remove(); }, 3000);
         }
 
         function displayAccounts() {
             const listContainer = document.getElementById('account-list');
-            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+            const searchQuery = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
 
             let filtered = accounts.filter(acc => {
                 const matchGame = currentSelectedGame === 'Semua' || acc.game === currentSelectedGame;
@@ -539,7 +369,7 @@
             });
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada akun yang ditemukan.</div>`;
+                listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada akun.</div>`;
                 return;
             }
             
@@ -548,82 +378,54 @@
                     <div class="card-img-wrapper">
                         <img src="${acc.img}" class="account-img" alt="Akun">
                         <div class="game-badge">${acc.game}</div>
-                        <div class="status-badge ${acc.status}">${acc.status === 'tersedia' ? 'Tersedia' : 'Terjual'}</div>
+                        <div class="status-badge ${acc.status}">${acc.status}</div>
                     </div>
                     <div class="account-info">
                         <div class="account-id">${acc.id}</div>
                         <div class="account-title">${acc.title}</div>
                         <div class="account-price">Rp ${acc.price.toLocaleString('id-ID')}</div>
-                        
                         <div class="card-actions">
                             ${currentUser && currentUser.role === 'admin' ? `
-                                <button class="btn-toggle-status" onclick="toggleStatus('${acc.id}')"><i class="fa-solid fa-rotate"></i> Ubah Status (${acc.status === 'tersedia' ? 'Jual' : 'Buka'})</button>
-                                <button class="btn-delete" onclick="deleteAccount('${acc.id}')"><i class="fa-solid fa-trash"></i> Hapus Akun</button>
+                                <button class="btn-toggle-status" onclick="toggleStatus('${acc.id}')">Ubah Status</button>
+                                <button class="btn-delete" onclick="deleteAccount('${acc.id}')">Hapus</button>
                             ` : `
-                                ${acc.status === 'tersedia' ? 
-                                    `<button class="btn-buy" onclick="openCheckout('${acc.id}', '${acc.title}', ${acc.price})"><i class="fa-solid fa-cart-shopping"></i> Beli Sekarang</button>` : 
-                                    `<button class="btn-buy" style="background: #475569; cursor: not-allowed;" disabled><i class="fa-solid fa-ban"></i> Terjual</button>`
-                                }
+                                ${acc.status === 'tersedia' ? `<button class="btn-buy" onclick="openCheckout('${acc.id}', '${acc.title}', ${acc.price})"><i class="fa-solid fa-cart-shopping"></i> Beli</button>` : `<button class="btn-buy" style="background:#475569;" disabled>Terjual</button>`}
                             `}
                         </div>
                     </div>
                 </div>
             `).join('');
 
-            const accBox = document.getElementById('account-info-box');
             if (currentUser) {
                 document.getElementById('auth-area').style.display = 'none';
                 document.getElementById('user-area').style.display = 'flex';
                 document.getElementById('username-display').innerText = currentUser.username;
-                
                 if (currentUser.role === 'admin') {
                     document.getElementById('role-badge').style.display = 'inline-block';
                     document.getElementById('admin-panel').style.display = 'block';
-                } else {
-                    document.getElementById('role-badge').style.display = 'none';
-                    document.getElementById('admin-panel').style.display = 'none';
-                }
-
-                if(accBox) {
-                    accBox.innerHTML = `<strong>Status:</strong> Login sebagai <span style="color:var(--accent-color); font-weight:bold;">${currentUser.username}</span> (${currentUser.role.toUpperCase()})`;
                 }
             } else {
                 document.getElementById('auth-area').style.display = 'flex';
                 document.getElementById('user-area').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'none';
-                if(accBox) {
-                    accBox.innerHTML = `Status: Belum Login. Silakan Login terlebih dahulu untuk melihat informasi akun Anda.`;
-                }
             }
         }
 
-        function setGameFilter(game, element) {
+        function setGameFilter(game, el) {
             currentSelectedGame = game;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
             displayAccounts();
         }
 
-        function filterAccounts() {
-            displayAccounts();
-        }
+        function filterAccounts() { displayAccounts(); }
 
-        function openModal(modalId) {
-            if(modalId === 'auth-modal') {
-                document.getElementById('login-error-box').style.display = 'none';
-                document.getElementById('reg-error-box').style.display = 'none';
-            }
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        function openSubModal(modalId) {
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function openSubModal(id) {
             document.getElementById('settings-modal').style.display = 'none';
-            document.getElementById(modalId).style.display = 'flex';
+            document.getElementById(id).style.display = 'flex';
         }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function switchForm(type) {
             if(type === 'login') {
@@ -635,55 +437,35 @@
             }
         }
 
-        function togglePasswordVisibility(inputId, iconElement) {
-            const inputField = document.getElementById(inputId);
-            if (inputField.type === 'password') {
-                inputField.type = 'text';
-                iconElement.classList.remove('fa-eye');
-                iconElement.classList.add('fa-eye-slash');
-            } else {
-                inputField.type = 'password';
-                iconElement.classList.remove('fa-eye-slash');
-                iconElement.classList.add('fa-eye');
-            }
+        function togglePasswordVisibility(id, icon) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         }
 
-        function handleRegister(event) {
-            event.preventDefault();
+        function handleRegister(e) {
+            e.preventDefault();
             const usn = document.getElementById('reg-username').value.trim();
             const pass = document.getElementById('reg-password').value;
-            const regError = document.getElementById('reg-error-box');
-
-            if (usn.toLowerCase() === ADMIN_CREDENTIALS.username.toLowerCase()) {
-                regError.innerText = "Username ini tidak boleh digunakan!";
-                regError.style.display = 'block';
+            if(registeredUsers.some(u => u.username === usn)) {
+                document.getElementById('reg-error-box').style.display = 'block';
                 return;
             }
-
-            const isExist = registeredUsers.some(u => u.username.toLowerCase() === usn.toLowerCase());
-            if (isExist) {
-                regError.innerText = "Username sudah dipakai orang lain!";
-                regError.style.display = 'block';
-                return;
-            }
-
-            const newUser = { username: usn, password: pass, role: "user" };
-            registeredUsers.push(newUser);
-            currentUser = newUser;
+            currentUser = { username: usn, password: pass, role: "user" };
+            registeredUsers.push(currentUser);
             saveToStorage();
-
             closeModal('auth-modal');
             displayAccounts();
-            showToast(`Pendaftaran Berhasil! Selamat datang ${usn}`);
+            showToast("Registrasi Berhasil!");
         }
 
-        function handleLogin(event) {
-            event.preventDefault();
-            const inputUsn = document.getElementById('login-username').value.trim();
-            const inputPass = document.getElementById('login-password').value;
-            const errorBox = document.getElementById('login-error-box');
+        function handleLogin(e) {
+            e.preventDefault();
+            const usn = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value;
 
-            if (inputUsn === ADMIN_CREDENTIALS.username && inputPass === ADMIN_CREDENTIALS.password) {
+            if(usn === ADMIN_CREDENTIALS.username && pass === ADMIN_CREDENTIALS.password) {
                 currentUser = { username: "Admin", role: "admin" };
                 saveToStorage();
                 closeModal('auth-modal');
@@ -692,134 +474,83 @@
                 return;
             }
 
-            const userMatch = registeredUsers.find(
-                user => user.username.toLowerCase() === inputUsn.toLowerCase() && user.password === inputPass
-            );
-
-            if (userMatch) {
-                currentUser = userMatch;
+            const found = registeredUsers.find(u => u.username === usn && u.password === pass);
+            if(found) {
+                currentUser = found;
                 saveToStorage();
                 closeModal('auth-modal');
                 displayAccounts();
-                showToast(`Login Berhasil! Selamat datang ${currentUser.username}`);
+                showToast("Login Berhasil!");
             } else {
-                errorBox.style.display = 'block';
+                document.getElementById('login-error-box').style.display = 'block';
             }
         }
 
         function openCheckout(id, title, price) {
             if (!currentUser) {
-                showToast("Silakan Login terlebih dahulu untuk membeli!", "error");
+                showToast("Silakan login dulu!", "error");
                 openModal('auth-modal');
-                switchForm('login');
                 return;
             }
-
             activeCheckoutData = { id, title, price };
             document.getElementById('checkout-product-title').innerText = title;
             document.getElementById('checkout-product-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
-            
-            document.querySelector('input[name="payment"][value="QRIS"]').checked = true;
-            selectPayment('QRIS');
-
             openModal('checkout-modal');
         }
 
-        function selectPayment(method) {
-            selectedPaymentMethod = method;
-            const qrisBox = document.getElementById('qris-box');
-            if (method === 'QRIS') {
-                qrisBox.style.display = 'block';
-            } else {
-                qrisBox.style.display = 'none';
-            }
-        }
+        function selectPayment(m) { selectedPaymentMethod = m; }
 
         function proceedToWhatsApp() {
             if (!activeCheckoutData) return;
-
-            const message = `Halo Admin Ganz Store! Saya ingin membeli akun berikut:%0A%0A` +
-                            `📌 *Kode Akun:* ${activeCheckoutData.id}%0A` +
-                            `🎮 *Nama Akun:* ${activeCheckoutData.title}%0A` +
-                            `💰 *Harga:* Rp ${activeCheckoutData.price.toLocaleString('id-ID')}%0A` +
-                            `💳 *Metode Pembayaran:* ${selectedPaymentMethod}%0A%0A` +
-                            `👤 *Username Pembeli:* ${currentUser.username}%0A%0A` +
-                            `Mohon instruksi selanjutnya, terima kasih!`;
-
-            const waUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${message}`;
-            window.open(waUrl, '_blank');
+            const text = `Beli Akun: ${activeCheckoutData.title} (${activeCheckoutData.id}) Seharga Rp ${activeCheckoutData.price}`;
+            window.open(`https://wa.me/${SELLER_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
             closeModal('checkout-modal');
         }
 
         function addNewAccount(e) {
             e.preventDefault();
-            
-            const newAcc = {
+            accounts.push({
                 id: document.getElementById('new-id').value,
                 game: document.getElementById('new-game').value,
                 title: document.getElementById('new-title').value,
                 price: parseInt(document.getElementById('new-price').value),
                 img: document.getElementById('new-img').value,
                 status: "tersedia"
-            };
-
-            accounts.push(newAcc);
+            });
             saveToStorage();
             displayAccounts();
             e.target.reset();
-            showToast("Produk berhasil ditambahkan!");
+            showToast("Produk ditambah!");
         }
 
-        function toggleStatus(accId) {
-            const acc = accounts.find(a => a.id === accId);
+        function toggleStatus(id) {
+            const acc = accounts.find(a => a.id === id);
             if(acc) {
                 acc.status = acc.status === 'tersedia' ? 'terjual' : 'tersedia';
                 saveToStorage();
                 displayAccounts();
-                showToast(`Status akun ${accId} diubah menjadi ${acc.status}`);
             }
         }
 
-        function deleteAccount(accId) {
-            if (confirm(`Yakin ingin menghapus akun ID: ${accId}?`)) {
-                accounts = accounts.filter(acc => acc.id !== accId);
-                saveToStorage();
-                displayAccounts();
-                showToast("Akun berhasil dihapus", "error");
-            }
+        function deleteAccount(id) {
+            accounts = accounts.filter(a => a.id !== id);
+            saveToStorage();
+            displayAccounts();
+            showToast("Dihapus", "error");
         }
 
         function logout() {
-            if (confirm("Mau keluar dari akun?")) {
-                currentUser = null;
-                saveToStorage();
-                displayAccounts();
-                showToast("Berhasil logout");
-   
+            currentUser = null;
+            saveToStorage();
+            displayAccounts();
+            showToast("Logout berhasil");
         }
 
-        function changeThemeColor(accentHex, heroBgHex) {
-            document.documentElement.style.setProperty('--accent-color', accentHex);
-            const heroEl = document.querySelector('.hero');
-            if(heroEl) {
-                heroEl.style.background = `linear-gradient(135deg, ${heroBgHex} 0%, #0b0f19 100%)`;
-            }
-            localStorage.setItem('user_theme_accent', accentHex);
-            localStorage.setItem('user_theme_hero', heroBgHex);
-            showToast("Tema website berhasil diubah!");
+        function changeThemeColor(accent, heroBg) {
+            document.documentElement.style.setProperty('--accent-color', accent);
+            document.querySelector('.hero').style.background = `linear-gradient(135deg, ${heroBg} 0%, #0b0f19 100%)`;
+            closeModal('setting-theme');
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedAccent = localStorage.getItem('user_theme_accent');
-            const savedHero = localStorage.getItem('user_theme_hero');
-            if (savedAccent && savedHero) {
-                document.documentElement.style.setProperty('--accent-color', savedAccent);
-                const heroEl = document.querySelector('.hero');
-                if(heroEl) {
-                    heroEl.style.background = `linear-gradient(135deg, ${savedHero} 0%, #0b0f19 100%)`;
-                }
-            }
-        });
 
         window.onclick = function(e) {
             if (e.target.classList.contains('modal')) {
