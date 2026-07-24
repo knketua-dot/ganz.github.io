@@ -467,7 +467,28 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC & FIREBASE SDK -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZvHhSl-Co4R-8rY1s7Z3Drh3OQqqWI2g",
+        authDomain: "ganzwe-6e80e.firebaseapp.com",
+        projectId: "ganzwe-6e80e",
+        storageBucket: "ganzwe-6e80e.firebasestorage.app",
+        messagingSenderId: "253181826067",
+        appId: "1:253181826067:web:f35fffc5311d8ddb01dbe6",
+        measurementId: "G-FHEFH9EWBD"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+
     <script>
         const SELLER_WHATSAPP = "6285834368903";
 
@@ -774,7 +795,7 @@
                 saveToStorage();
                 displayAccounts();
                 showToast("Berhasil logout");
-            }
+   
         }
 
         function changeThemeColor(accentHex, heroBgHex) {
