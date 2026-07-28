@@ -18,6 +18,14 @@
         .btn-settings-gear:hover { border-color: var(--accent-color); background: rgba(6, 182, 212, 0.1); }
         .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 
+        /* STORE STATUS BADGE */
+        .store-status { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .store-status.open { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .store-status.closed { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .open .status-dot { background: var(--success); }
+        .closed .status-dot { background: var(--danger); }
+
         /* AUTH & PROFILE */
         .auth-buttons { display: flex; gap: 10px; align-items: center; }
         .btn-auth { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
@@ -48,7 +56,7 @@
         .admin-panel { display: none; background: var(--card-bg); border: 1px solid var(--accent-color); border-radius: 14px; padding: 20px; margin-bottom: 30px; }
         .admin-panel h3 { color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; }
         .admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-        .admin-form input, .admin-form select { padding: 10px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; font-size: 13px; }
+        .admin-form input, .admin-form select, .admin-form textarea { padding: 10px 14px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; font-size: 13px; }
         .btn-add-product { grid-column: 1 / -1; padding: 12px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
 
         /* GRID AKUN */
@@ -62,12 +70,16 @@
         .status-badge.tersedia { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
         .status-badge.terjual { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
 
+        .btn-wishlist { position: absolute; bottom: 10px; right: 10px; background: rgba(15, 23, 42, 0.8); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-wishlist.active { color: var(--danger); }
+
         .account-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
         .account-id { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
         .account-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
         .account-price { font-size: 17px; color: var(--accent-color); font-weight: 800; margin-bottom: 15px; }
         
         .card-actions { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+        .btn-detail { width: 100%; padding: 8px; background: var(--bg-dark); color: var(--accent-color); border: 1px solid var(--accent-color); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 4px; }
         .btn-buy { width: 100%; padding: 10px; background: #25D366; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-buy:hover { opacity: 0.9; }
         .btn-delete { width: 100%; padding: 8px; background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
@@ -109,7 +121,6 @@
 
         .qris-container { display: none; text-align: center; margin-bottom: 20px; background: var(--bg-dark); padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
         .qris-img { width: 180px; height: 180px; object-fit: contain; background: white; padding: 8px; border-radius: 8px; margin: 10px auto; display: block; }
-        .qris-note { font-size: 11px; color: var(--text-muted); }
 
         /* TOAST */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
@@ -134,6 +145,11 @@
                 <a href="#" class="logo"><i class="fa-solid fa-gamepad"></i> GANZ STORE</a>
             </div>
 
+            <!-- STATUS TOKO -->
+            <div class="store-status open" id="store-status-badge">
+                <span class="status-dot"></span> <span id="store-status-text">Toko Buka</span>
+            </div>
+
             <div class="auth-buttons" id="auth-area">
                 <button class="btn-auth btn-login" onclick="openModal('auth-modal'); switchForm('login');"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
                 <button class="btn-auth btn-register" onclick="openModal('auth-modal'); switchForm('register');"><i class="fa-solid fa-user-plus"></i> Buat Akun</button>
@@ -156,6 +172,7 @@
     </div>
 
     <div class="container">
+        <!-- PANEL ADMIN -->
         <div class="admin-panel" id="admin-panel">
             <h3><i class="fa-solid fa-user-gear"></i> Panel Admin - Tambah Akun Jualan</h3>
             <form class="admin-form" onsubmit="addNewAccount(event)">
@@ -169,10 +186,12 @@
                 <input type="text" id="new-title" placeholder="Judul Akun" required>
                 <input type="number" id="new-price" placeholder="Harga (Rp)" required>
                 <input type="url" id="new-img" placeholder="Link Foto Akun (URL Gambar)" required>
+                <textarea id="new-desc" placeholder="Rincian / Spesifikasi Akun (Hero, Skin, Status Bintang, dll)" rows="2" style="grid-column: 1 / -1;"></textarea>
                 <button type="submit" class="btn-add-product"><i class="fa-solid fa-plus"></i> Tambahkan Ke Katalog</button>
             </form>
         </div>
 
+        <!-- FILTER & SEARCH -->
         <div class="filter-section">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -184,10 +203,29 @@
                 <button class="filter-btn" onclick="setGameFilter('Free Fire', this)">Free Fire</button>
                 <button class="filter-btn" onclick="setGameFilter('PUBG Mobile', this)">PUBG Mobile</button>
                 <button class="filter-btn" onclick="setGameFilter('Valorant', this)">Valorant</button>
+                <button class="filter-btn" onclick="setGameFilter('Favorit', this)"><i class="fa-solid fa-heart" style="color:var(--danger)"></i> Favorit Saya</button>
             </div>
         </div>
 
         <div class="account-grid" id="account-list"></div>
+    </div>
+
+    <!-- MODAL DETAIL AKUN (FITUR BARU) -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('detail-modal')">&times;</span>
+            <div class="checkout-header">
+                <h3 id="detail-title">Judul Akun</h3>
+                <p id="detail-id" style="font-size:11px; color:var(--text-muted);">ACC-000</p>
+            </div>
+            <img id="detail-img" src="" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:15px;" alt="Detail Image">
+            <div style="background:var(--bg-dark); padding:12px; border-radius:10px; font-size:13px; color:var(--text-main); margin-bottom:15px; border:1px solid var(--border);">
+                <strong>Spesifikasi Akun:</strong>
+                <p id="detail-desc" style="margin-top:6px; color:var(--text-muted); white-space:pre-line;"></p>
+            </div>
+            <div id="detail-price" style="font-size:18px; font-weight:800; color:var(--accent-color); margin-bottom:15px; text-align:center;">Rp 0</div>
+            <button class="btn-buy" id="detail-buy-btn"><i class="fa-solid fa-cart-shopping"></i> Beli Sekarang</button>
+        </div>
     </div>
 
     <!-- MODAL SETTINGS -->
@@ -236,9 +274,10 @@
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px;">
                 <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: white;">Warna Utama:</div>
                 <div style="display: flex; gap: 12px;">
-                    <button onclick="changeThemeColor('#06b6d4', '#164e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4; border: 2px solid white; cursor: pointer;"></button>
-                    <button onclick="changeThemeColor('#22c55e', '#064e3b')" style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 2px solid white; cursor: pointer;"></button>
-                    <button onclick="changeThemeColor('#eab308', '#713f12')" style="width: 36px; height: 36px; border-radius: 50%; background: #eab308; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#06b6d4')" style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#22c55e')" style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#eab308')" style="width: 36px; height: 36px; border-radius: 50%; background: #eab308; border: 2px solid white; cursor: pointer;"></button>
+                    <button onclick="changeThemeColor('#ef4444')" style="width: 36px; height: 36px; border-radius: 50%; background: #ef4444; border: 2px solid white; cursor: pointer;"></button>
                 </div>
             </div>
             <button class="btn-submit" onclick="closeModal('setting-theme')">Simpan</button>
@@ -251,7 +290,9 @@
             <span class="close-btn" onclick="closeModal('setting-rules')">&times;</span>
             <div class="checkout-header"><h3>Peraturan Toko</h3></div>
             <div style="font-size: 13px; color: var(--text-muted); background: var(--bg-dark); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
-                Wajib video unboxing saat pertama kali login ke akun game yang dibeli.
+                1. Wajib video unboxing saat pertama kali login ke akun game yang dibeli.<br>
+                2. Garansi berlaku 1x24 jam setelah pengiriman akun.<br>
+                3. Pembayaran hanya dilakukan melalui metode resmi Ganz Store.
             </div>
             <button class="btn-submit" onclick="closeModal('setting-rules')">Tutup</button>
         </div>
@@ -313,12 +354,20 @@
             </div>
             <div class="payment-methods">
                 <label class="payment-option" onclick="selectPayment('QRIS')">
-                    <span><i class="fa-solid fa-qrcode" style="color:var(--accent-color);"></i> QRIS</span>
+                    <span><i class="fa-solid fa-qrcode" style="color:var(--accent-color);"></i> QRIS All Payment</span>
                     <input type="radio" name="payment" value="QRIS" checked>
                 </label>
                 <label class="payment-option" onclick="selectPayment('DANA')">
                     <span><i class="fa-solid fa-wallet" style="color:#0080ff;"></i> DANA</span>
                     <input type="radio" name="payment" value="DANA">
+                </label>
+                <label class="payment-option" onclick="selectPayment('GOPAY')">
+                    <span><i class="fa-solid fa-mobile-screen" style="color:#00a5cf;"></i> GoPay / OVO</span>
+                    <input type="radio" name="payment" value="GOPAY">
+                </label>
+                <label class="payment-option" onclick="selectPayment('BANK')">
+                    <span><i class="fa-solid fa-building-columns" style="color:#22c55e;"></i> Transfer Bank (BCA/BRI)</span>
+                    <input type="radio" name="payment" value="BANK">
                 </label>
             </div>
             <div class="qris-container" id="qris-box" style="display: block;">
@@ -335,9 +384,10 @@
 
         let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
         let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
-            { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500", status: "tersedia" },
-            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", status: "tersedia" }
+            { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500", desc: "Hero: 110\nSkin: 145 (Epic, Lightborn)\nStatus: All Unbind", status: "tersedia" },
+            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", desc: "Bundle: Old Sultan\nWeapon: SG2 OPM & Rapper\nLogin: FB Monsep", status: "tersedia" }
         ];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist_database')) || [];
         let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
         let currentSelectedGame = 'Semua';
         let selectedPaymentMethod = 'QRIS';
@@ -347,6 +397,7 @@
             localStorage.setItem('users_database', JSON.stringify(registeredUsers));
             localStorage.setItem('accounts_database', JSON.stringify(accounts));
             localStorage.setItem('session_user', JSON.stringify(currentUser));
+            localStorage.setItem('wishlist_database', JSON.stringify(wishlist));
         }
 
         function showToast(message, type = 'success') {
@@ -358,33 +409,56 @@
             setTimeout(() => { toast.remove(); }, 3000);
         }
 
+        function toggleWishlist(id) {
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(item => item !== id);
+                showToast("Dihapus dari Favorit");
+            } else {
+                wishlist.push(id);
+                showToast("Ditambahkan ke Favorit ❤️");
+            }
+            saveToStorage();
+            displayAccounts();
+        }
+
         function displayAccounts() {
             const listContainer = document.getElementById('account-list');
             const searchQuery = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
 
             let filtered = accounts.filter(acc => {
-                const matchGame = currentSelectedGame === 'Semua' || acc.game === currentSelectedGame;
+                let matchGame = false;
+                if (currentSelectedGame === 'Favorit') {
+                    matchGame = wishlist.includes(acc.id);
+                } else {
+                    matchGame = currentSelectedGame === 'Semua' || acc.game === currentSelectedGame;
+                }
                 const matchSearch = acc.title.toLowerCase().includes(searchQuery) || acc.id.toLowerCase().includes(searchQuery);
                 return matchGame && matchSearch;
             });
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada akun.</div>`;
+                listContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Tidak ada akun ditemukan.</div>`;
                 return;
             }
             
-            listContainer.innerHTML = filtered.map(acc => `
+            listContainer.innerHTML = filtered.map(acc => {
+                const isFav = wishlist.includes(acc.id);
+                return `
                 <div class="account-card">
                     <div class="card-img-wrapper">
                         <img src="${acc.img}" class="account-img" alt="Akun">
                         <div class="game-badge">${acc.game}</div>
                         <div class="status-badge ${acc.status}">${acc.status}</div>
+                        <button class="btn-wishlist ${isFav ? 'active' : ''}" onclick="toggleWishlist('${acc.id}')">
+                            <i class="fa-solid fa-heart"></i>
+                        </button>
                     </div>
                     <div class="account-info">
                         <div class="account-id">${acc.id}</div>
                         <div class="account-title">${acc.title}</div>
                         <div class="account-price">Rp ${acc.price.toLocaleString('id-ID')}</div>
                         <div class="card-actions">
+                            <button class="btn-detail" onclick="openDetail('${acc.id}')"><i class="fa-solid fa-eye"></i> Detail Akun</button>
                             ${currentUser && currentUser.role === 'admin' ? `
                                 <button class="btn-toggle-status" onclick="toggleStatus('${acc.id}')">Ubah Status</button>
                                 <button class="btn-delete" onclick="deleteAccount('${acc.id}')">Hapus</button>
@@ -394,7 +468,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             if (currentUser) {
                 document.getElementById('auth-area').style.display = 'none';
@@ -409,6 +483,25 @@
                 document.getElementById('user-area').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'none';
             }
+        }
+
+        function openDetail(id) {
+            const acc = accounts.find(a => a.id === id);
+            if(!acc) return;
+            document.getElementById('detail-id').innerText = acc.id;
+            document.getElementById('detail-title').innerText = acc.title;
+            document.getElementById('detail-img').src = acc.img;
+            document.getElementById('detail-desc').innerText = acc.desc || 'Tidak ada spesifikasi tambahan.';
+            document.getElementById('detail-price').innerText = `Rp ${acc.price.toLocaleString('id-ID')}`;
+            
+            const buyBtn = document.getElementById('detail-buy-btn');
+            if(acc.status === 'tersedia') {
+                buyBtn.style.display = 'flex';
+                buyBtn.onclick = () => { closeModal('detail-modal'); openCheckout(acc.id, acc.title, acc.price); };
+            } else {
+                buyBtn.style.display = 'none';
+            }
+            openModal('detail-modal');
         }
 
         function setGameFilter(game, el) {
@@ -486,78 +579,88 @@
             }
         }
 
-        function openCheckout(id, title, price) {
-            if (!currentUser) {
-                showToast("Silakan login dulu!", "error");
-                openModal('auth-modal');
-                return;
-            }
-            activeCheckoutData = { id, title, price };
-            document.getElementById('checkout-product-title').innerText = title;
-            document.getElementById('checkout-product-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
-            openModal('checkout-modal');
-        }
-
-        function selectPayment(m) { selectedPaymentMethod = m; }
-
-        function proceedToWhatsApp() {
-            if (!activeCheckoutData) return;
-            const text = `Beli Akun: ${activeCheckoutData.title} (${activeCheckoutData.id}) Seharga Rp ${activeCheckoutData.price}`;
-            window.open(`https://wa.me/${SELLER_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
-            closeModal('checkout-modal');
-        }
-
-        function addNewAccount(e) {
-            e.preventDefault();
-            accounts.push({
-                id: document.getElementById('new-id').value,
-                game: document.getElementById('new-game').value,
-                title: document.getElementById('new-title').value,
-                price: parseInt(document.getElementById('new-price').value),
-                img: document.getElementById('new-img').value,
-                status: "tersedia"
-            });
-            saveToStorage();
-            displayAccounts();
-            e.target.reset();
-            showToast("Produk ditambah!");
-        }
-
-        function toggleStatus(id) {
-            const acc = accounts.find(a => a.id === id);
-            if(acc) {
-                acc.status = acc.status === 'tersedia' ? 'terjual' : 'tersedia';
-                saveToStorage();
-                displayAccounts();
-            }
-        }
-
-        function deleteAccount(id) {
-            accounts = accounts.filter(a => a.id !== id);
-            saveToStorage();
-            displayAccounts();
-            showToast("Dihapus", "error");
-        }
-
         function logout() {
             currentUser = null;
             saveToStorage();
             displayAccounts();
-            showToast("Logout berhasil");
+            showToast("Berhasil Logout!");
         }
 
-        function changeThemeColor(accent, heroBg) {
-            document.documentElement.style.setProperty('--accent-color', accent);
-            document.querySelector('.hero').style.background = `linear-gradient(135deg, ${heroBg} 0%, #0b0f19 100%)`;
-            closeModal('setting-theme');
+        function addNewAccount(e) {
+            e.preventDefault();
+            const id = document.getElementById('new-id').value.trim();
+            const game = document.getElementById('new-game').value;
+            const title = document.getElementById('new-title').value.trim();
+            const price = parseInt(document.getElementById('new-price').value);
+            const img = document.getElementById('new-img').value.trim();
+            const desc = document.getElementById('new-desc').value.trim();
+
+            accounts.push({ id, game, title, price, img, desc, status: "tersedia" });
+            saveToStorage();
+            displayAccounts();
+            e.target.reset();
+            showToast("Akun Berhasil Ditambahkan!");
         }
 
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal')) {
-                e.target.style.display = 'none';
+        function deleteAccount(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus akun ini?")) {
+                accounts = accounts.filter(acc => acc.id !== id);
+                saveToStorage();
+                displayAccounts();
+                showToast("Akun Dihapus!");
             }
         }
 
+        function toggleStatus(id) {
+            accounts = accounts.map(acc => {
+                if (acc.id === id) {
+                    acc.status = acc.status === 'tersedia' ? 'terjual' : 'tersedia';
+                }
+                return acc;
+            });
+            saveToStorage();
+            displayAccounts();
+            showToast("Status Akun Diperbarui!");
+        }
+
+        function openCheckout(id, title, price) {
+            activeCheckoutData = { id, title, price };
+            document.getElementById('checkout-product-title').innerText = `${id} - ${title}`;
+            document.getElementById('checkout-product-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
+            openModal('checkout-modal');
+        }
+
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            const qrisBox = document.getElementById('qris-box');
+            if (method === 'QRIS') {
+                qrisBox.style.display = 'block';
+            } else {
+                qrisBox.style.display = 'none';
+            }
+        }
+
+        function proceedToWhatsApp() {
+            if (!activeCheckoutData) return;
+            const buyerName = currentUser ? currentUser.username : "Tamu";
+            const message = `Halo Admin Ganz Store, saya mau beli akun ini:%0A%0A` +
+                `📌 *Kode Akun:* ${activeCheckoutData.id}%0A` +
+                `🎮 *Judul:* ${activeCheckoutData.title}%0A` +
+                `💰 *Harga:* Rp ${activeCheckoutData.price.toLocaleString('id-ID')}%0A` +
+                `💳 *Metode Pembayaran:* ${selectedPaymentMethod}%0A` +
+                `👤 *Pembeli:* ${buyerName}%0A%0A` +
+                `Mohon segera diproses ya!`;
+            
+            window.open(`https://wa.me/${SELLER_WHATSAPP}?text=${message}`, '_blank');
+            closeModal('checkout-modal');
+        }
+
+        function changeThemeColor(primaryColor) {
+            document.documentElement.style.setProperty('--accent-color', primaryColor);
+            showToast("Tema Berhasil Diubah!");
+        }
+
+        // Inisialisasi awal
         displayAccounts();
     </script>
 </body>
