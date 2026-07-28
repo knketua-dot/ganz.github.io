@@ -385,8 +385,9 @@
         let registeredUsers = JSON.parse(localStorage.getItem('users_database')) || [];
         let accounts = JSON.parse(localStorage.getItem('accounts_database')) || [
             { id: "ACC-ML01", game: "Mobile Legends", title: "Akun ML Mythic Glory", price: 450000, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500", desc: "Hero: 110\nSkin: 145 (Epic, Lightborn)\nStatus: All Unbind", status: "tersedia" },
-            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", desc: "Bundle: Old Sultan\nWeapon: SG2 OPM & Rapper\nLogin: FB Monsep", status: "tersedia" }
-        ];
+            { id: "ACC-FF01", game: "Free Fire", title: "Akun FF Sultan SG2", price: 350000, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500", desc: "Bundle: Old Sultan\nWeapon: SG2 OPM & Rapper\nLogin: FB", status: "sold" },
+            { id: "ACC-FF02", game: "Free Fire", title: "sultan", price: 350000, img: "https://tinyurl.com/ytwyk3v6", desc: "Bundle: Old Sultan\nWeapon: SG2 OPM & Rapper\nLogin: FB", status: "redy" }
+        ]
         let wishlist = JSON.parse(localStorage.getItem('wishlist_database')) || [];
         let currentUser = JSON.parse(localStorage.getItem('session_user')) || null;
         let currentSelectedGame = 'Semua';
